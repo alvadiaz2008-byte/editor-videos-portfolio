@@ -163,22 +163,40 @@ body {
   width: 100%;
 }
 
-.showreel-placeholder {
+/* VIDEO SLOTS */
+.video-slot {
+  position: relative;
   aspect-ratio: 16/9;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--muted);
 }
 
-.showreel-placeholder span {
-  font-weight: 500;
-  color: var(--text);
-  margin-bottom: 0.4rem;
+.slot-number {
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--muted);
+  opacity: 0.5;
+  letter-spacing: 2px;
+  z-index: 1;
+}
+
+.slot-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+}
+
+.slot-video:not([hidden]) + .slot-number,
+.video-slot.has-video .slot-number {
+  display: none;
 }
 
 /* PROJECTS */
@@ -248,6 +266,8 @@ body {
 .thumb {
   aspect-ratio: 16/9;
   background: #17171a;
+  border: none;
+  border-radius: 0;
 }
 
 .card-info {
