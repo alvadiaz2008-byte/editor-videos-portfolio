@@ -33,20 +33,19 @@ filterBtns.forEach(btn => {
 // Auto-load videos from /videos/ folder
 // Naming: "video 01.mp4", "video 02.mp4", etc.
 function loadVideos() {
-  const slots = document.querySelectorAll('.video-slot[data-video]');
+  const slots = document.querySelectorAll('[data-video]');
 
   slots.forEach(slot => {
-    const num = slot.dataset.video.padStart(2, '0');
-    const videoEl = slot.querySelector('.slot-video');
+    const num = String(slot.dataset.video).padStart(2, '0');
+    const videoEl = slot.querySelector('.slot-video, .hero-video');
     if (!videoEl) return;
 
-    // Paths with proper encoding for spaces
     const candidates = [
       `videos/${encodeURIComponent(`video ${num}.mp4`)}`,
       `videos/${encodeURIComponent(`video ${num}.webm`)}`,
       `videos/video-${num}.mp4`,
       `videos/video${num}.mp4`,
-      `videos/video ${num}.mp4` // fallback unencoded
+      `videos/video ${num}.mp4`
     ];
 
     let loaded = false;
@@ -66,6 +65,11 @@ function loadVideos() {
         slot.classList.add('has-video');
         const numberEl = slot.querySelector('.slot-number');
         if (numberEl) numberEl.style.display = 'none';
+        // Autoplay hero background
+        if (videoEl.classList.contains('hero-video')) {
+          videoEl.muted = true;
+          videoEl.play().catch(() => {});
+        }
       };
 
       testVideo.addEventListener('loadeddata', onSuccess);
@@ -75,7 +79,6 @@ function loadVideos() {
         tryNext(index + 1);
       };
 
-      // Cache bust to force recheck after renames
       testVideo.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
     };
 
