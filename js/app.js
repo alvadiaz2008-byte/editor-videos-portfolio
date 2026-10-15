@@ -28,7 +28,6 @@ filterBtns.forEach(btn => {
   });
 });
 
-// Probe if a video URL exists
 function probeVideo(src) {
   return new Promise((resolve) => {
     const v = document.createElement('video');
@@ -61,7 +60,6 @@ async function findVideo(label) {
   return null;
 }
 
-// Main + extra videos for a project id (e.g. "02" → 02, 02.1, 02.2 ...)
 async function findProjectVideos(id) {
   const found = [];
   const main = await findVideo(id);
@@ -75,13 +73,80 @@ async function findProjectVideos(id) {
   return found;
 }
 
-// Auto-load grid/hero videos
+// Thumbnails: imagenes/imagen 02.jpg etc.
+function thumbCandidates(num) {
+  const label = String(num).padStart(2, '0');
+  const bases = [
+    `imagenes/${encodeURIComponent(`imagen ${label}`)}`,
+    `imagenes/imagen ${label}`,
+    `imagenes/imagen-${label}`,
+    `imagenes/imagen${label}`
+  ];
+  const exts = ['.jpg', '.jpeg', '.png', '.webp'];
+  const list = [];
+  bases.forEach(b => exts.forEach(e => list.push(b + e)));
+  return list;
+}
+
+function findThumbnail(num) {
+  return new Promise((resolve) => {
+    const candidates = thumbCandidates(num);
+    let i = 0;
+    const next = () => {
+      if (i >= candidates.length) {
+        resolve(null);
+        return;
+      }
+      const src = candidates[i++];
+      const img = new Image();
+      img.onload = () => resolve(src);
+      img.onerror = next;
+      img.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
+    };
+    next();
+  });
+}
+
 function loadVideos() {
   document.querySelectorAll('[data-video]').forEach(slot => {
     const num = String(slot.dataset.video).padStart(2, '0');
     const videoEl = slot.querySelector('.slot-video, .hero-video');
-    if (!videoEl) return;
+    const isHero = !!slot.querySelector('.hero-video');
 
+    // Catálogo: preferir miniatura de imagenes/
+    if (!isHero) {
+      findThumbnail(num).then(thumb => {
+        if (thumb) {
+          let img = slot.querySelector('.slot-thumb');
+          if (!img) {
+            img = document.createElement('img');
+            img.className = 'slot-thumb';
+            img.alt = '';
+            slot.appendChild(img);
+          }
+          img.src = thumb;
+          slot.classList.add('has-video');
+          const numberEl = slot.querySelector('.slot-number');
+          if (numberEl) numberEl.style.display = 'none';
+          if (videoEl) videoEl.hidden = true;
+          return;
+        }
+        // Fallback: video como miniatura
+        if (!videoEl) return;
+        findVideo(num).then(src => {
+          if (!src) return;
+          videoEl.src = src;
+          videoEl.hidden = false;
+          slot.classList.add('has-video');
+          const numberEl = slot.querySelector('.slot-number');
+          if (numberEl) numberEl.style.display = 'none';
+        });
+      });
+      return;
+    }
+
+    // Hero: video de fondo
+    if (!videoEl) return;
     findVideo(num).then(src => {
       if (!src) return;
       videoEl.src = src;
@@ -89,17 +154,14 @@ function loadVideos() {
       slot.classList.add('has-video');
       const numberEl = slot.querySelector('.slot-number');
       if (numberEl) numberEl.style.display = 'none';
-      if (videoEl.classList.contains('hero-video')) {
-        videoEl.muted = true;
-        videoEl.play().catch(() => {});
-      }
+      videoEl.muted = true;
+      videoEl.play().catch(() => {});
     });
   });
 }
 
 loadVideos();
 
-// Before / After
 function loadBeforeAfter() {
   const beforeEl = document.getElementById('beforeImg');
   const afterEl = document.getElementById('afterImg');
@@ -150,14 +212,12 @@ function loadBeforeAfter() {
 
 loadBeforeAfter();
 
-// Projects data from JSON
 let projectsData = [];
 
 fetch('data/projects.json')
   .then(r => r.json())
   .then(data => {
     projectsData = data;
-    // Update card titles/descriptions from JSON if present
     data.forEach(p => {
       const card = document.querySelector(`.project-card[data-video="${p.id}"]`);
       if (!card) return;
@@ -171,7 +231,6 @@ fetch('data/projects.json')
   })
   .catch(() => {});
 
-// Modal
 const modal = document.getElementById('modal');
 const modalBody = document.getElementById('modalBody');
 const modalClose = document.getElementById('modalClose');
@@ -222,7 +281,6 @@ function closeModal() {
 if (modalClose) modalClose.addEventListener('click', closeModal);
 modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-// Before/After slider
 const baSlider = document.getElementById('baSlider');
 const baHandle = document.getElementById('baHandle');
 const baAfter = document.querySelector('.ba-after');
