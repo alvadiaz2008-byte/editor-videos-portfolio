@@ -109,51 +109,57 @@ function findThumbnail(num) {
 }
 
 function loadVideos() {
-  document.querySelectorAll('[data-video]').forEach(slot => {
-    const num = String(slot.dataset.video).padStart(2, '0');
-    const videoEl = slot.querySelector('.slot-video, .hero-video');
-    const isHero = !!slot.querySelector('.hero-video');
+  document.querySelectorAll('[data-video]').forEach(el => {
+    const num = String(el.dataset.video).padStart(2, '0');
+    const isHero = el.classList.contains('hero-bg');
 
-    // Catálogo: solo miniatura de imagen (sin video en grid → evita parpadeo)
-    if (!isHero) {
-      // Ocultar video del grid siempre
-      if (videoEl) {
-        videoEl.removeAttribute('src');
-        videoEl.hidden = true;
-        videoEl.load?.();
-      }
-
-      findThumbnail(num).then(thumb => {
-        if (!thumb) return; // se queda el número por defecto
-
-        let img = slot.querySelector('.slot-thumb');
-        if (!img) {
-          img = document.createElement('img');
-          img.className = 'slot-thumb';
-          img.alt = '';
-          img.loading = 'lazy';
-          img.decoding = 'async';
-          slot.appendChild(img);
-        }
-        img.src = thumb;
-        slot.classList.add('has-thumb');
-        const numberEl = slot.querySelector('.slot-number');
+    // HERO
+    if (isHero) {
+      const videoEl = el.querySelector('.hero-video');
+      if (!videoEl) return;
+      findVideo(num).then(src => {
+        if (!src) return;
+        videoEl.src = src;
+        videoEl.hidden = false;
+        el.classList.add('has-video');
+        const numberEl = el.querySelector('.slot-number');
         if (numberEl) numberEl.style.display = 'none';
+        videoEl.muted = true;
+        videoEl.play().catch(() => {});
       });
       return;
     }
 
-    // Hero: video de fondo
-    if (!videoEl) return;
-    findVideo(num).then(src => {
-      if (!src) return;
-      videoEl.src = src;
-      videoEl.hidden = false;
-      slot.classList.add('has-video');
-      const numberEl = slot.querySelector('.slot-number');
+    // CATÁLOGO: miniatura solo dentro de .video-slot
+    const mediaBox = el.querySelector('.video-slot');
+    if (!mediaBox) return;
+
+    const videoEl = mediaBox.querySelector('.slot-video');
+    if (videoEl) {
+      videoEl.removeAttribute('src');
+      videoEl.hidden = true;
+      try { videoEl.load(); } catch (_) {}
+    }
+
+    // limpiar thumbs viejos mal colocados en la card
+    el.querySelectorAll(':scope > .slot-thumb').forEach(n => n.remove());
+
+    findThumbnail(num).then(thumb => {
+      if (!thumb) return;
+
+      let img = mediaBox.querySelector('.slot-thumb');
+      if (!img) {
+        img = document.createElement('img');
+        img.className = 'slot-thumb';
+        img.alt = '';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        mediaBox.appendChild(img);
+      }
+      img.src = thumb;
+      mediaBox.classList.add('has-thumb');
+      const numberEl = mediaBox.querySelector('.slot-number');
       if (numberEl) numberEl.style.display = 'none';
-      videoEl.muted = true;
-      videoEl.play().catch(() => {});
     });
   });
 }
