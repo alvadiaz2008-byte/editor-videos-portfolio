@@ -6,7 +6,6 @@ if (menuToggle && nav) {
   menuToggle.addEventListener('click', () => {
     nav.classList.toggle('open');
   });
-
   nav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => nav.classList.remove('open'));
   });
@@ -20,9 +19,7 @@ filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     filterBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-
     const filter = btn.dataset.filter;
-
     projectCards.forEach(card => {
       if (filter === 'all' || card.dataset.category === filter) {
         card.classList.remove('hidden');
@@ -32,6 +29,55 @@ filterBtns.forEach(btn => {
     });
   });
 });
+
+// Auto-load videos from /videos/ folder
+// Naming: "video 01.mp4", "video 02.mp4", etc.
+function loadVideos() {
+  const slots = document.querySelectorAll('.video-slot[data-video]');
+
+  slots.forEach(slot => {
+    const num = slot.dataset.video;
+    const videoEl = slot.querySelector('.slot-video');
+    if (!videoEl) return;
+
+    const candidates = [
+      `videos/video ${num}.mp4`,
+      `videos/video ${num}.webm`,
+      `videos/video-${num}.mp4`,
+      `videos/video${num}.mp4`
+    ];
+
+    let loaded = false;
+
+    const tryNext = (index) => {
+      if (index >= candidates.length || loaded) return;
+
+      const src = candidates[index];
+      const testVideo = document.createElement('video');
+      testVideo.preload = 'metadata';
+
+      testVideo.onloadeddata = () => {
+        if (loaded) return;
+        loaded = true;
+        videoEl.src = src;
+        videoEl.hidden = false;
+        slot.classList.add('has-video');
+        const numberEl = slot.querySelector('.slot-number');
+        if (numberEl) numberEl.style.display = 'none';
+      };
+
+      testVideo.onerror = () => {
+        tryNext(index + 1);
+      };
+
+      testVideo.src = src;
+    };
+
+    tryNext(0);
+  });
+}
+
+loadVideos();
 
 // Modal for projects
 const modal = document.getElementById('modal');
@@ -43,14 +89,20 @@ projectCards.forEach(card => {
     const title = card.querySelector('h3')?.textContent || '';
     const desc = card.querySelector('p')?.textContent || '';
     const cat = card.querySelector('.category')?.textContent || '';
+    const videoNum = card.dataset.video;
+    const videoSrc = card.querySelector('.slot-video')?.src || '';
+
+    let videoHtml = `<div style="aspect-ratio:16/9;background:#17171a;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);">Video ${videoNum} no disponible</div>`;
+
+    if (videoSrc) {
+      videoHtml = `<video src="${videoSrc}" controls autoplay style="width:100%;border-radius:8px;"></video>`;
+    }
 
     modalBody.innerHTML = `
       <span class="category">${cat}</span>
       <h3 style="margin:0.5rem 0 1rem;font-size:1.4rem;">${title}</h3>
       <p style="color:var(--muted);margin-bottom:1.5rem;">${desc}</p>
-      <div style="aspect-ratio:16/9;background:#17171a;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);">
-        Reproductor de video próximamente
-      </div>
+      ${videoHtml}
     `;
     modal.hidden = false;
   });
@@ -59,11 +111,15 @@ projectCards.forEach(card => {
 if (modalClose) {
   modalClose.addEventListener('click', () => {
     modal.hidden = true;
+    modalBody.querySelector('video')?.pause();
   });
 }
 
 modal?.addEventListener('click', (e) => {
-  if (e.target === modal) modal.hidden = true;
+  if (e.target === modal) {
+    modal.hidden = true;
+    modalBody.querySelector('video')?.pause();
+  }
 });
 
 // Before/After slider
@@ -79,7 +135,6 @@ if (baSlider && baHandle && baAfter) {
     let x = clientX - rect.left;
     x = Math.max(0, Math.min(x, rect.width));
     const percent = (x / rect.width) * 100;
-
     baHandle.style.left = `${percent}%`;
     baAfter.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
   };
@@ -98,7 +153,5 @@ if (baSlider && baHandle && baAfter) {
     if (isDragging && e.touches[0]) updateSlider(e.touches[0].clientX);
   }, { passive: true });
 
-  baSlider.addEventListener('click', (e) => {
-    updateSlider(e.clientX);
-  });
+  baSlider.addEventListener('click', (e) => updateSlider(e.clientX));
 }
