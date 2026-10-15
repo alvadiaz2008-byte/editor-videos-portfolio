@@ -290,6 +290,16 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
   z-index: 2;
 }
 
+.slot-thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  display: block;
+}
+
 .slot-video:not([hidden]) + .slot-number,
 .video-slot.has-video .slot-number,
 .hero-bg.has-video .slot-number {
@@ -543,7 +553,6 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
   font-size: 0.85rem;
 }
 
-/* MODAL — 9:16 (sin cambios) */
 .modal {
   position: fixed;
   inset: 0;
