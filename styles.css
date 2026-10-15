@@ -5,12 +5,13 @@
 }
 
 :root {
-  --bg: #0F0F10;
-  --surface: #1F1F23;
-  --text: #FAFAFA;
-  --muted: #A1A1AA;
-  --accent: #2563EB;
-  --border: #3F3F46;
+  --bg: #0f0e06;
+  --surface: #212112;
+  --text: #f9fbf8;
+  --muted: #b1b195;
+  --accent: #8a8a66;
+  --border: #494b35;
+  --accent-hover: #5c5f46;
 }
 
 html {
@@ -39,7 +40,7 @@ body {
 .decor-circle {
   position: absolute;
   border-radius: 50%;
-  border: 1.5px dashed rgba(161, 161, 170, 0.18);
+  border: 1.5px dashed rgba(177, 177, 149, 0.2);
   animation: spin 60s linear infinite;
 }
 
@@ -58,7 +59,7 @@ body {
   right: -40px;
   animation-direction: reverse;
   animation-duration: 50s;
-  border-color: rgba(37, 99, 235, 0.12);
+  border-color: rgba(138, 138, 102, 0.18);
 }
 
 .decor-circle.c3 {
@@ -76,7 +77,7 @@ body {
 
 .decor-line {
   position: absolute;
-  background: linear-gradient(90deg, transparent, rgba(161, 161, 170, 0.12), transparent);
+  background: linear-gradient(90deg, transparent, rgba(177, 177, 149, 0.14), transparent);
   height: 1px;
 }
 
@@ -90,7 +91,7 @@ body {
   width: 25%;
   top: 70%;
   left: 5%;
-  background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(138, 138, 102, 0.12), transparent);
 }
 
 .decor-line.l3 {
@@ -121,7 +122,7 @@ main, .header, .footer, .modal {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background: rgba(15, 15, 16, 0.92);
+  background: rgba(15, 14, 6, 0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
@@ -152,7 +153,7 @@ main, .header, .footer, .modal {
 
 .btn-whatsapp {
   background: var(--accent);
-  color: #fff;
+  color: var(--bg);
   padding: 0.55rem 1.25rem;
   border-radius: 6px;
   text-decoration: none;
@@ -162,7 +163,7 @@ main, .header, .footer, .modal {
 }
 
 .btn-whatsapp:hover {
-  background: #1d4ed8;
+  background: var(--accent-hover);
 }
 
 .menu-toggle {
@@ -219,12 +220,13 @@ main, .header, .footer, .modal {
 
 .btn-primary {
   background: var(--accent);
-  color: #fff;
+  color: var(--bg);
   border: 1px solid var(--accent);
 }
 
 .btn-primary:hover {
-  background: #1d4ed8;
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 .btn-outline {
@@ -315,7 +317,7 @@ main, .header, .footer, .modal {
 .filter-btn.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--bg);
 }
 
 .project-grid {
@@ -344,7 +346,7 @@ main, .header, .footer, .modal {
 
 .thumb {
   aspect-ratio: 16/9;
-  background: #17171a;
+  background: #2e2b1f;
   border: none;
   border-radius: 0;
 }
@@ -374,7 +376,7 @@ main, .header, .footer, .modal {
 /* BEFORE / AFTER */
 .before-after {
   padding: 6rem 0;
-  background: #0c0c0d;
+  background: #0c0b05;
 }
 
 .section-desc {
@@ -412,14 +414,14 @@ main, .header, .footer, .modal {
   height: 100%;
   object-fit: cover;
   display: block;
-  background: #1a1a1d;
+  background: #2e2b1f;
 }
 
 .ba-label {
   position: absolute;
   top: 1rem;
   padding: 0.3rem 0.7rem;
-  background: rgba(0,0,0,0.65);
+  background: rgba(15, 14, 6, 0.7);
   font-size: 0.75rem;
   border-radius: 4px;
   color: var(--text);
@@ -449,7 +451,7 @@ main, .header, .footer, .modal {
   height: 36px;
   background: var(--accent);
   border-radius: 50%;
-  border: 3px solid #fff;
+  border: 3px solid var(--text);
 }
 
 .ba-note {
@@ -502,7 +504,7 @@ main, .header, .footer, .modal {
 .contact {
   padding: 6rem 0;
   text-align: center;
-  background: #0c0c0d;
+  background: #0c0b05;
 }
 
 .contact p {
@@ -548,7 +550,7 @@ main, .header, .footer, .modal {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.85);
+  background: rgba(15, 14, 6, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
