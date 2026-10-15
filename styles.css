@@ -270,6 +270,8 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
   display: flex;
   align-items: center;
   justify-content: center;
+  isolation: isolate;
+  contain: layout paint;
 }
 
 .slot-number {
@@ -292,16 +294,23 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 
 .slot-thumb {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: cover;
+  object-position: center;
   z-index: 2;
   display: block;
+  pointer-events: none;
+  border: 0;
 }
 
 .slot-video:not([hidden]) + .slot-number,
 .video-slot.has-video .slot-number,
+.video-slot.has-thumb .slot-number,
 .hero-bg.has-video .slot-number {
   display: none;
 }
