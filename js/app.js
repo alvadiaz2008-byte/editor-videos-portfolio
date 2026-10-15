@@ -36,15 +36,17 @@ function loadVideos() {
   const slots = document.querySelectorAll('.video-slot[data-video]');
 
   slots.forEach(slot => {
-    const num = slot.dataset.video;
+    const num = slot.dataset.video.padStart(2, '0');
     const videoEl = slot.querySelector('.slot-video');
     if (!videoEl) return;
 
+    // Paths with proper encoding for spaces
     const candidates = [
-      `videos/video ${num}.mp4`,
-      `videos/video ${num}.webm`,
+      `videos/${encodeURIComponent(`video ${num}.mp4`)}`,
+      `videos/${encodeURIComponent(`video ${num}.webm`)}`,
       `videos/video-${num}.mp4`,
-      `videos/video${num}.mp4`
+      `videos/video${num}.mp4`,
+      `videos/video ${num}.mp4` // fallback unencoded
     ];
 
     let loaded = false;
@@ -56,7 +58,7 @@ function loadVideos() {
       const testVideo = document.createElement('video');
       testVideo.preload = 'metadata';
 
-      testVideo.onloadeddata = () => {
+      const onSuccess = () => {
         if (loaded) return;
         loaded = true;
         videoEl.src = src;
@@ -66,11 +68,15 @@ function loadVideos() {
         if (numberEl) numberEl.style.display = 'none';
       };
 
+      testVideo.addEventListener('loadeddata', onSuccess);
+      testVideo.addEventListener('canplay', onSuccess);
+
       testVideo.onerror = () => {
         tryNext(index + 1);
       };
 
-      testVideo.src = src;
+      // Cache bust to force recheck after renames
+      testVideo.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
     };
 
     tryNext(0);
