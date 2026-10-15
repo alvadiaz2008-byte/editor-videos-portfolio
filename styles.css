@@ -259,10 +259,10 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
   background: var(--surface);
 }
 
-/* Grid thumbs verticales 9:16 */
+/* Catálogo: 3:4 */
 .video-slot {
   position: relative;
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 3 / 4;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -335,7 +335,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1.5rem;
 }
 
@@ -356,7 +356,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 .project-card.hidden { display: none; }
 
 .thumb {
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 3 / 4;
   background: #2e2b1f;
   border: none;
   border-radius: 0;
@@ -543,7 +543,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
   font-size: 0.85rem;
 }
 
-/* MODAL — formato vertical */
+/* MODAL — 9:16 (sin cambios) */
 .modal {
   position: fixed;
   inset: 0;
