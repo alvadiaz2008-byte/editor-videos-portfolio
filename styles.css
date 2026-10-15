@@ -5,13 +5,13 @@
 }
 
 :root {
-  --bg: #0f0e06;
-  --surface: #212112;
-  --text: #f9fbf8;
-  --muted: #b1b195;
-  --accent: #8a8a66;
-  --border: #494b35;
-  --accent-hover: #5c5f46;
+  --bg: #040316;
+  --surface: #101129;
+  --text: #f8f9fc;
+  --muted: #959bb7;
+  --accent: #666c8a;
+  --border: #343954;
+  --accent-hover: #484d68;
 }
 
 html {
@@ -39,7 +39,7 @@ body {
 .decor-circle {
   position: absolute;
   border-radius: 50%;
-  border: 1.5px dashed rgba(177, 177, 149, 0.2);
+  border: 1.5px dashed rgba(149, 155, 183, 0.2);
   animation: spin 60s linear infinite;
 }
 
@@ -58,7 +58,7 @@ body {
   right: -40px;
   animation-direction: reverse;
   animation-duration: 50s;
-  border-color: rgba(138, 138, 102, 0.18);
+  border-color: rgba(102, 108, 138, 0.2);
 }
 
 .decor-circle.c3 {
@@ -76,7 +76,7 @@ body {
 
 .decor-line {
   position: absolute;
-  background: linear-gradient(90deg, transparent, rgba(177, 177, 149, 0.14), transparent);
+  background: linear-gradient(90deg, transparent, rgba(149, 155, 183, 0.14), transparent);
   height: 1px;
 }
 
@@ -85,7 +85,7 @@ body {
   width: 25%;
   top: 70%;
   left: 5%;
-  background: linear-gradient(90deg, transparent, rgba(138, 138, 102, 0.12), transparent);
+  background: linear-gradient(90deg, transparent, rgba(102, 108, 138, 0.14), transparent);
 }
 .decor-line.l3 { width: 30%; bottom: 22%; right: 12%; }
 
@@ -107,7 +107,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background: rgba(15, 14, 6, 0.92);
+  background: rgba(4, 3, 22, 0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
@@ -131,7 +131,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 
 .btn-whatsapp {
   background: var(--accent);
-  color: var(--bg);
+  color: var(--text);
   padding: 0.55rem 1.25rem;
   border-radius: 6px;
   text-decoration: none;
@@ -191,9 +191,9 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(15, 14, 6, 0.55) 0%,
-    rgba(15, 14, 6, 0.7) 50%,
-    rgba(15, 14, 6, 0.85) 100%
+    rgba(4, 3, 22, 0.55) 0%,
+    rgba(4, 3, 22, 0.7) 50%,
+    rgba(4, 3, 22, 0.85) 100%
   );
   z-index: 2;
 }
@@ -241,7 +241,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 
 .btn-primary {
   background: var(--accent);
-  color: var(--bg);
+  color: var(--text);
   border: 1px solid var(--accent);
 }
 .btn-primary:hover {
@@ -259,7 +259,6 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
   background: var(--surface);
 }
 
-/* Catálogo: 3:4 */
 .video-slot {
   position: relative;
   aspect-ratio: 3 / 4;
@@ -349,7 +348,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 .filter-btn.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: var(--bg);
+  color: var(--text);
 }
 
 .project-grid {
@@ -376,7 +375,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 
 .thumb {
   aspect-ratio: 3 / 4;
-  background: #2e2b1f;
+  background: #1f233a;
   border: none;
   border-radius: 0;
 }
@@ -403,7 +402,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 
 .before-after {
   padding: 6rem 0;
-  background: #0c0b05;
+  background: #030214;
 }
 
 .section-desc {
@@ -437,14 +436,14 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
   height: 100%;
   object-fit: cover;
   display: block;
-  background: #2e2b1f;
+  background: #1f233a;
 }
 
 .ba-label {
   position: absolute;
   top: 1rem;
   padding: 0.3rem 0.7rem;
-  background: rgba(15, 14, 6, 0.7);
+  background: rgba(4, 3, 22, 0.7);
   font-size: 0.75rem;
   border-radius: 4px;
   color: var(--text);
@@ -524,7 +523,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 .contact {
   padding: 6rem 0;
   text-align: center;
-  background: #0c0b05;
+  background: #030214;
 }
 
 .contact p {
@@ -565,7 +564,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(15, 14, 6, 0.92);
+  background: rgba(4, 3, 22, 0.92);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -618,7 +617,7 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
 .modal-video-wrap {
   width: min(280px, 42vw);
   aspect-ratio: 9 / 16;
-  background: #0f0e06;
+  background: #040316;
   border-radius: 10px;
   overflow: hidden;
   display: flex;
