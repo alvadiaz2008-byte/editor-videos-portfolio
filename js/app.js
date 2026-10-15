@@ -3,9 +3,7 @@ const menuToggle = document.getElementById('menuToggle');
 const nav = document.getElementById('nav');
 
 if (menuToggle && nav) {
-  menuToggle.addEventListener('click', () => {
-    nav.classList.toggle('open');
-  });
+  menuToggle.addEventListener('click', () => nav.classList.toggle('open'));
   nav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => nav.classList.remove('open'));
   });
@@ -30,62 +28,78 @@ filterBtns.forEach(btn => {
   });
 });
 
-// Auto-load videos from /videos/ folder
-function loadVideos() {
-  const slots = document.querySelectorAll('[data-video]');
+// Probe if a video URL exists
+function probeVideo(src) {
+  return new Promise((resolve) => {
+    const v = document.createElement('video');
+    v.preload = 'metadata';
+    const done = (ok) => {
+      v.onloadeddata = null;
+      v.onerror = null;
+      resolve(ok ? src : null);
+    };
+    v.onloadeddata = () => done(true);
+    v.onerror = () => done(false);
+    v.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
+  });
+}
 
-  slots.forEach(slot => {
+function videoCandidates(label) {
+  return [
+    `videos/${encodeURIComponent(`video ${label}.mp4`)}`,
+    `videos/video ${label}.mp4`,
+    `videos/video-${label}.mp4`,
+    `videos/video${label}.mp4`
+  ];
+}
+
+async function findVideo(label) {
+  for (const src of videoCandidates(label)) {
+    const found = await probeVideo(src);
+    if (found) return found;
+  }
+  return null;
+}
+
+// Main + extra videos for a project id (e.g. "02" → 02, 02.1, 02.2 ...)
+async function findProjectVideos(id) {
+  const found = [];
+  const main = await findVideo(id);
+  if (main) found.push(main);
+
+  for (let i = 1; i <= 8; i++) {
+    const extra = await findVideo(`${id}.${i}`);
+    if (extra) found.push(extra);
+    else break;
+  }
+  return found;
+}
+
+// Auto-load grid/hero videos
+function loadVideos() {
+  document.querySelectorAll('[data-video]').forEach(slot => {
     const num = String(slot.dataset.video).padStart(2, '0');
     const videoEl = slot.querySelector('.slot-video, .hero-video');
     if (!videoEl) return;
 
-    const candidates = [
-      `videos/${encodeURIComponent(`video ${num}.mp4`)}`,
-      `videos/${encodeURIComponent(`video ${num}.webm`)}`,
-      `videos/video-${num}.mp4`,
-      `videos/video${num}.mp4`,
-      `videos/video ${num}.mp4`
-    ];
-
-    let loaded = false;
-
-    const tryNext = (index) => {
-      if (index >= candidates.length || loaded) return;
-
-      const src = candidates[index];
-      const testVideo = document.createElement('video');
-      testVideo.preload = 'metadata';
-
-      const onSuccess = () => {
-        if (loaded) return;
-        loaded = true;
-        videoEl.src = src;
-        videoEl.hidden = false;
-        slot.classList.add('has-video');
-        const numberEl = slot.querySelector('.slot-number');
-        if (numberEl) numberEl.style.display = 'none';
-        if (videoEl.classList.contains('hero-video')) {
-          videoEl.muted = true;
-          videoEl.play().catch(() => {});
-        }
-      };
-
-      testVideo.addEventListener('loadeddata', onSuccess);
-      testVideo.addEventListener('canplay', onSuccess);
-      testVideo.onerror = () => tryNext(index + 1);
-      testVideo.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
-    };
-
-    tryNext(0);
+    findVideo(num).then(src => {
+      if (!src) return;
+      videoEl.src = src;
+      videoEl.hidden = false;
+      slot.classList.add('has-video');
+      const numberEl = slot.querySelector('.slot-number');
+      if (numberEl) numberEl.style.display = 'none';
+      if (videoEl.classList.contains('hero-video')) {
+        videoEl.muted = true;
+        videoEl.play().catch(() => {});
+      }
+    });
   });
 }
 
 loadVideos();
 
-// Before / After media loader
-// Place files in videos/:
-//   antes.jpg / antes.png / antes.mp4  OR  before.jpg / before.png / before.mp4
-//   despues.jpg / despues.png / despues.mp4  OR  after.jpg / after.png / after.mp4
+// Before / After
 function loadBeforeAfter() {
   const beforeEl = document.getElementById('beforeImg');
   const afterEl = document.getElementById('afterImg');
@@ -102,13 +116,12 @@ function loadBeforeAfter() {
     'videos/despues.mp4', 'videos/after.mp4'
   ];
 
-  const tryLoad = (names, targetImg, parent) => {
+  const tryLoad = (names, targetImg) => {
     let i = 0;
     const next = () => {
       if (i >= names.length) return;
       const src = names[i++];
       const isVideo = src.endsWith('.mp4') || src.endsWith('.webm');
-
       if (isVideo) {
         const v = document.createElement('video');
         v.muted = true;
@@ -123,9 +136,7 @@ function loadBeforeAfter() {
         v.src = src;
       } else {
         const img = new Image();
-        img.onload = () => {
-          targetImg.src = src;
-        };
+        img.onload = () => { targetImg.src = src; };
         img.onerror = next;
         img.src = src;
       }
@@ -133,54 +144,83 @@ function loadBeforeAfter() {
     next();
   };
 
-  tryLoad(beforeNames, beforeEl, beforeEl.parentElement);
-  tryLoad(afterNames, afterEl, afterEl.parentElement);
+  tryLoad(beforeNames, beforeEl);
+  tryLoad(afterNames, afterEl);
 }
 
 loadBeforeAfter();
 
-// Modal for projects — keep aspect ratio
+// Projects data from JSON
+let projectsData = [];
+
+fetch('data/projects.json')
+  .then(r => r.json())
+  .then(data => {
+    projectsData = data;
+    // Update card titles/descriptions from JSON if present
+    data.forEach(p => {
+      const card = document.querySelector(`.project-card[data-video="${p.id}"]`);
+      if (!card) return;
+      const h3 = card.querySelector('h3');
+      const pEl = card.querySelector('.card-info p');
+      const cat = card.querySelector('.category');
+      if (h3) h3.textContent = p.titulo;
+      if (pEl) pEl.textContent = p.descripcion.split('\n')[0].slice(0, 90) + (p.descripcion.length > 90 ? '…' : '');
+      if (cat) cat.textContent = p.categoria;
+    });
+  })
+  .catch(() => {});
+
+// Modal
 const modal = document.getElementById('modal');
 const modalBody = document.getElementById('modalBody');
 const modalClose = document.getElementById('modalClose');
 
 projectCards.forEach(card => {
-  card.addEventListener('click', () => {
-    const title = card.querySelector('h3')?.textContent || '';
-    const desc = card.querySelector('p')?.textContent || '';
-    const cat = card.querySelector('.category')?.textContent || '';
-    const videoNum = card.dataset.video;
-    const videoSrc = card.querySelector('.slot-video')?.src || '';
+  card.addEventListener('click', async () => {
+    const id = String(card.dataset.video).padStart(2, '0');
+    const fromJson = projectsData.find(p => p.id === id);
 
-    let videoHtml = `<div class="modal-video-wrap" style="color:var(--muted);font-size:0.9rem;">Video ${videoNum} no disponible</div>`;
-
-    if (videoSrc) {
-      videoHtml = `<div class="modal-video-wrap"><video src="${videoSrc}" controls autoplay playsinline></video></div>`;
-    }
+    const title = fromJson?.titulo || card.querySelector('h3')?.textContent || '';
+    const desc = fromJson?.descripcion || card.querySelector('p')?.textContent || '';
+    const cat = fromJson?.categoria || card.querySelector('.category')?.textContent || '';
 
     modalBody.innerHTML = `
-      <span class="category">${cat}</span>
-      <h3 style="margin:0.5rem 0 1rem;font-size:1.4rem;">${title}</h3>
-      <p style="color:var(--muted);margin-bottom:1.5rem;">${desc}</p>
-      ${videoHtml}
+      <div class="modal-layout">
+        <div class="modal-videos" id="modalVideos">
+          <div class="modal-video-wrap" style="color:var(--muted);font-size:0.9rem;">Cargando…</div>
+        </div>
+        <div class="modal-info">
+          <span class="category">${cat}</span>
+          <h3>${title}</h3>
+          <p>${desc}</p>
+        </div>
+      </div>
     `;
     modal.hidden = false;
+
+    const videos = await findProjectVideos(id);
+    const container = document.getElementById('modalVideos');
+    if (!container) return;
+
+    if (videos.length === 0) {
+      container.innerHTML = `<div class="modal-video-wrap" style="color:var(--muted);font-size:0.9rem;">Sin videos para este proyecto</div>`;
+      return;
+    }
+
+    container.innerHTML = videos.map((src, i) =>
+      `<div class="modal-video-wrap"><video src="${src}" controls ${i === 0 ? 'autoplay' : ''} playsinline></video></div>`
+    ).join('');
   });
 });
 
-if (modalClose) {
-  modalClose.addEventListener('click', () => {
-    modal.hidden = true;
-    modalBody.querySelector('video')?.pause();
-  });
+function closeModal() {
+  modal.hidden = true;
+  modalBody.querySelectorAll('video').forEach(v => v.pause());
 }
 
-modal?.addEventListener('click', (e) => {
-  if (e.target === modal) {
-    modal.hidden = true;
-    modalBody.querySelector('video')?.pause();
-  }
-});
+if (modalClose) modalClose.addEventListener('click', closeModal);
+modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
 // Before/After slider
 const baSlider = document.getElementById('baSlider');
@@ -201,17 +241,11 @@ if (baSlider && baHandle && baAfter) {
 
   baHandle.addEventListener('mousedown', () => isDragging = true);
   baHandle.addEventListener('touchstart', () => isDragging = true, { passive: true });
-
   window.addEventListener('mouseup', () => isDragging = false);
   window.addEventListener('touchend', () => isDragging = false);
-
-  window.addEventListener('mousemove', (e) => {
-    if (isDragging) updateSlider(e.clientX);
-  });
-
+  window.addEventListener('mousemove', (e) => { if (isDragging) updateSlider(e.clientX); });
   window.addEventListener('touchmove', (e) => {
     if (isDragging && e.touches[0]) updateSlider(e.touches[0].clientX);
   }, { passive: true });
-
   baSlider.addEventListener('click', (e) => updateSlider(e.clientX));
 }
