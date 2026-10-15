@@ -31,7 +31,6 @@ filterBtns.forEach(btn => {
 });
 
 // Auto-load videos from /videos/ folder
-// Naming: "video 01.mp4", "video 02.mp4", etc.
 function loadVideos() {
   const slots = document.querySelectorAll('[data-video]');
 
@@ -65,7 +64,6 @@ function loadVideos() {
         slot.classList.add('has-video');
         const numberEl = slot.querySelector('.slot-number');
         if (numberEl) numberEl.style.display = 'none';
-        // Autoplay hero background
         if (videoEl.classList.contains('hero-video')) {
           videoEl.muted = true;
           videoEl.play().catch(() => {});
@@ -74,11 +72,7 @@ function loadVideos() {
 
       testVideo.addEventListener('loadeddata', onSuccess);
       testVideo.addEventListener('canplay', onSuccess);
-
-      testVideo.onerror = () => {
-        tryNext(index + 1);
-      };
-
+      testVideo.onerror = () => tryNext(index + 1);
       testVideo.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
     };
 
@@ -88,7 +82,64 @@ function loadVideos() {
 
 loadVideos();
 
-// Modal for projects
+// Before / After media loader
+// Place files in videos/:
+//   antes.jpg / antes.png / antes.mp4  OR  before.jpg / before.png / before.mp4
+//   despues.jpg / despues.png / despues.mp4  OR  after.jpg / after.png / after.mp4
+function loadBeforeAfter() {
+  const beforeEl = document.getElementById('beforeImg');
+  const afterEl = document.getElementById('afterImg');
+  if (!beforeEl || !afterEl) return;
+
+  const beforeNames = [
+    'videos/antes.jpg', 'videos/antes.png', 'videos/antes.webp',
+    'videos/before.jpg', 'videos/before.png', 'videos/before.webp',
+    'videos/antes.mp4', 'videos/before.mp4'
+  ];
+  const afterNames = [
+    'videos/despues.jpg', 'videos/despues.png', 'videos/despues.webp',
+    'videos/after.jpg', 'videos/after.png', 'videos/after.webp',
+    'videos/despues.mp4', 'videos/after.mp4'
+  ];
+
+  const tryLoad = (names, targetImg, parent) => {
+    let i = 0;
+    const next = () => {
+      if (i >= names.length) return;
+      const src = names[i++];
+      const isVideo = src.endsWith('.mp4') || src.endsWith('.webm');
+
+      if (isVideo) {
+        const v = document.createElement('video');
+        v.muted = true;
+        v.loop = true;
+        v.playsInline = true;
+        v.autoplay = true;
+        v.onloadeddata = () => {
+          targetImg.replaceWith(v);
+          v.play().catch(() => {});
+        };
+        v.onerror = next;
+        v.src = src;
+      } else {
+        const img = new Image();
+        img.onload = () => {
+          targetImg.src = src;
+        };
+        img.onerror = next;
+        img.src = src;
+      }
+    };
+    next();
+  };
+
+  tryLoad(beforeNames, beforeEl, beforeEl.parentElement);
+  tryLoad(afterNames, afterEl, afterEl.parentElement);
+}
+
+loadBeforeAfter();
+
+// Modal for projects — keep aspect ratio
 const modal = document.getElementById('modal');
 const modalBody = document.getElementById('modalBody');
 const modalClose = document.getElementById('modalClose');
@@ -101,10 +152,10 @@ projectCards.forEach(card => {
     const videoNum = card.dataset.video;
     const videoSrc = card.querySelector('.slot-video')?.src || '';
 
-    let videoHtml = `<div style="aspect-ratio:16/9;background:#17171a;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);">Video ${videoNum} no disponible</div>`;
+    let videoHtml = `<div class="modal-video-wrap" style="color:var(--muted);font-size:0.9rem;">Video ${videoNum} no disponible</div>`;
 
     if (videoSrc) {
-      videoHtml = `<video src="${videoSrc}" controls autoplay style="width:100%;border-radius:8px;"></video>`;
+      videoHtml = `<div class="modal-video-wrap"><video src="${videoSrc}" controls autoplay playsinline></video></div>`;
     }
 
     modalBody.innerHTML = `
