@@ -28,21 +28,56 @@ filterBtns.forEach(btn => {
   });
 });
 
-function probeVideo(src) {
-  return new Promise((resolve) => {
-    const v = document.createElement('video');
-    v.preload = 'metadata';
-    const done = (ok) => {
-      v.removeAttribute('src');
-      v.load();
-      v.onloadeddata = null;
-      v.onerror = null;
-      resolve(ok ? src : null);
-    };
-    v.onloadeddata = () => done(true);
-    v.onerror = () => done(false);
-    v.src = src;
+// ---- Performance helpers ----
+function pauseAllPageVideos() {
+  document.querySelectorAll('video').forEach(v => {
+    if (!v.closest('#modal')) {
+      try { v.pause(); } catch (_) {}
+    }
   });
+}
+
+function resumeVisibleVideos() {
+  document.querySelectorAll('video[data-auto-play]').forEach(v => {
+    if (v.dataset.shouldPlay === '1') {
+      v.play().catch(() => {});
+    }
+  });
+}
+
+function observeVideoVisibility(video, rootEl) {
+  if (!video || !rootEl) return;
+  video.dataset.autoPlay = '1';
+  const io = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting && !modalOpen) {
+        video.dataset.shouldPlay = '1';
+        video.play().catch(() => {});
+      } else {
+        video.dataset.shouldPlay = '0';
+        video.pause();
+      }
+    },
+    { threshold: 0.2, rootMargin: '40px' }
+  );
+  io.observe(rootEl);
+}
+
+async function urlExists(src) {
+  try {
+    const r = await fetch(src, { method: 'HEAD' });
+    if (r.ok) return true;
+  } catch (_) {}
+  // fallback: lightweight range check
+  try {
+    const r = await fetch(src, {
+      method: 'GET',
+      headers: { Range: 'bytes=0-1' }
+    });
+    return r.ok || r.status === 206;
+  } catch (_) {
+    return false;
+  }
 }
 
 function videoCandidates(label) {
@@ -55,11 +90,12 @@ function videoCandidates(label) {
 }
 
 async function findVideo(label) {
-  for (const src of videoCandidates(label)) {
-    const found = await probeVideo(src);
-    if (found) return found;
-  }
-  return null;
+  const candidates = videoCandidates(label);
+  // parallel checks — faster load
+  const checks = await Promise.all(
+    candidates.map(async (src) => ((await urlExists(src)) ? src : null))
+  );
+  return checks.find(Boolean) || null;
 }
 
 async function findProjectVideos(id) {
@@ -67,10 +103,20 @@ async function findProjectVideos(id) {
   const main = await findVideo(id);
   if (main) found.push(main);
 
-  for (let i = 1; i <= 8; i++) {
-    const extra = await findVideo(`${id}.${i}`);
-    if (extra) found.push(extra);
-    else break;
+  // check extras in parallel batches of 3
+  for (let i = 1; i <= 8; i += 3) {
+    const batch = [];
+    for (let j = i; j < i + 3 && j <= 8; j++) {
+      batch.push(findVideo(`${id}.${j}`));
+    }
+    const results = await Promise.all(batch);
+    let stop = false;
+    results.forEach((src) => {
+      if (stop) return;
+      if (src) found.push(src);
+      else stop = true;
+    });
+    if (stop) break;
   }
   return found;
 }
@@ -85,7 +131,7 @@ function thumbCandidates(num) {
   ];
   const exts = ['.jpg', '.jpeg', '.png', '.webp'];
   const list = [];
-  bases.forEach(b => exts.forEach(e => list.push(b + e)));
+  bases.forEach((b) => exts.forEach((e) => list.push(b + e)));
   return list;
 }
 
@@ -109,28 +155,30 @@ function findThumbnail(num) {
 }
 
 function loadVideos() {
-  document.querySelectorAll('[data-video]').forEach(el => {
+  document.querySelectorAll('[data-video]').forEach((el) => {
     const num = String(el.dataset.video).padStart(2, '0');
     const isHero = el.classList.contains('hero-bg');
 
-    // HERO
     if (isHero) {
       const videoEl = el.querySelector('.hero-video');
       if (!videoEl) return;
-      findVideo(num).then(src => {
+      videoEl.preload = 'metadata';
+      videoEl.muted = true;
+      videoEl.playsInline = true;
+      videoEl.loop = true;
+
+      findVideo(num).then((src) => {
         if (!src) return;
         videoEl.src = src;
         videoEl.hidden = false;
         el.classList.add('has-video');
         const numberEl = el.querySelector('.slot-number');
         if (numberEl) numberEl.style.display = 'none';
-        videoEl.muted = true;
-        videoEl.play().catch(() => {});
+        observeVideoVisibility(videoEl, el.closest('.hero') || el);
       });
       return;
     }
 
-    // CATÁLOGO: miniatura solo dentro de .video-slot
     const mediaBox = el.querySelector('.video-slot');
     if (!mediaBox) return;
 
@@ -138,15 +186,15 @@ function loadVideos() {
     if (videoEl) {
       videoEl.removeAttribute('src');
       videoEl.hidden = true;
-      try { videoEl.load(); } catch (_) {}
+      try {
+        videoEl.load();
+      } catch (_) {}
     }
 
-    // limpiar thumbs viejos mal colocados en la card
-    el.querySelectorAll(':scope > .slot-thumb').forEach(n => n.remove());
+    el.querySelectorAll(':scope > .slot-thumb').forEach((n) => n.remove());
 
-    findThumbnail(num).then(thumb => {
+    findThumbnail(num).then((thumb) => {
       if (!thumb) return;
-
       let img = mediaBox.querySelector('.slot-thumb');
       if (!img) {
         img = document.createElement('img');
@@ -169,17 +217,28 @@ loadVideos();
 function loadBeforeAfter() {
   const beforeEl = document.getElementById('beforeImg');
   const afterEl = document.getElementById('afterImg');
+  const slider = document.getElementById('baSlider');
   if (!beforeEl || !afterEl) return;
 
   const beforeNames = [
-    'videos/antes.jpg', 'videos/antes.png', 'videos/antes.webp',
-    'videos/before.jpg', 'videos/before.png', 'videos/before.webp',
-    'videos/antes.mp4', 'videos/before.mp4'
+    'videos/antes.jpg',
+    'videos/antes.png',
+    'videos/antes.webp',
+    'videos/before.jpg',
+    'videos/before.png',
+    'videos/before.webp',
+    'videos/antes.mp4',
+    'videos/before.mp4'
   ];
   const afterNames = [
-    'videos/despues.jpg', 'videos/despues.png', 'videos/despues.webp',
-    'videos/after.jpg', 'videos/after.png', 'videos/after.webp',
-    'videos/despues.mp4', 'videos/after.mp4'
+    'videos/despues.jpg',
+    'videos/despues.png',
+    'videos/despues.webp',
+    'videos/after.jpg',
+    'videos/after.png',
+    'videos/after.webp',
+    'videos/despues.mp4',
+    'videos/after.mp4'
   ];
 
   const tryLoad = (names, targetImg) => {
@@ -193,16 +252,18 @@ function loadBeforeAfter() {
         v.muted = true;
         v.loop = true;
         v.playsInline = true;
-        v.autoplay = true;
+        v.preload = 'metadata';
         v.onloadeddata = () => {
           targetImg.replaceWith(v);
-          v.play().catch(() => {});
+          if (slider) observeVideoVisibility(v, slider);
         };
         v.onerror = next;
         v.src = src;
       } else {
         const img = new Image();
-        img.onload = () => { targetImg.src = src; };
+        img.onload = () => {
+          targetImg.src = src;
+        };
         img.onerror = next;
         img.src = src;
       }
@@ -217,19 +278,23 @@ function loadBeforeAfter() {
 loadBeforeAfter();
 
 let projectsData = [];
+let modalOpen = false;
 
 fetch('data/projects.json')
-  .then(r => r.json())
-  .then(data => {
+  .then((r) => r.json())
+  .then((data) => {
     projectsData = data;
-    data.forEach(p => {
+    data.forEach((p) => {
       const card = document.querySelector(`.project-card[data-video="${p.id}"]`);
       if (!card) return;
       const h3 = card.querySelector('h3');
       const pEl = card.querySelector('.card-info p');
       const cat = card.querySelector('.category');
       if (h3) h3.textContent = p.titulo;
-      if (pEl) pEl.textContent = p.descripcion.split('\n')[0].slice(0, 90) + (p.descripcion.length > 90 ? '…' : '');
+      if (pEl)
+        pEl.textContent =
+          p.descripcion.split('\n')[0].slice(0, 90) +
+          (p.descripcion.length > 90 ? '…' : '');
       if (cat) cat.textContent = p.categoria;
     });
   })
@@ -239,14 +304,20 @@ const modal = document.getElementById('modal');
 const modalBody = document.getElementById('modalBody');
 const modalClose = document.getElementById('modalClose');
 
-projectCards.forEach(card => {
+projectCards.forEach((card) => {
   card.addEventListener('click', async () => {
     const id = String(card.dataset.video).padStart(2, '0');
-    const fromJson = projectsData.find(p => p.id === id);
+    const fromJson = projectsData.find((p) => p.id === id);
 
     const title = fromJson?.titulo || card.querySelector('h3')?.textContent || '';
-    const desc = fromJson?.descripcion || card.querySelector('p')?.textContent || '';
-    const cat = fromJson?.categoria || card.querySelector('.category')?.textContent || '';
+    const desc =
+      fromJson?.descripcion || card.querySelector('p')?.textContent || '';
+    const cat =
+      fromJson?.categoria || card.querySelector('.category')?.textContent || '';
+
+    // pause background media while modal is open
+    modalOpen = true;
+    pauseAllPageVideos();
 
     modalBody.innerHTML = `
       <div class="modal-layout">
@@ -271,24 +342,43 @@ projectCards.forEach(card => {
       return;
     }
 
-    container.innerHTML = videos.map((src, i) =>
-      `<div class="modal-video-wrap"><video src="${src}" controls ${i === 0 ? 'autoplay' : ''} playsinline></video></div>`
-    ).join('');
+    container.innerHTML = videos
+      .map(
+        (src, i) => `
+      <div class="modal-video-wrap">
+        <video
+          src="${src}"
+          controls
+          playsinline
+          preload="${i === 0 ? 'auto' : 'none'}"
+          ${i === 0 ? 'autoplay' : ''}
+        ></video>
+      </div>`
+      )
+      .join('');
   });
 });
 
 function closeModal() {
+  modalOpen = false;
   modal.hidden = true;
-  modalBody.querySelectorAll('video').forEach(v => {
+  modalBody.querySelectorAll('video').forEach((v) => {
     v.pause();
     v.removeAttribute('src');
-    v.load();
+    try {
+      v.load();
+    } catch (_) {}
   });
+  modalBody.innerHTML = '';
+  resumeVisibleVideos();
 }
 
 if (modalClose) modalClose.addEventListener('click', closeModal);
-modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+modal?.addEventListener('click', (e) => {
+  if (e.target === modal) closeModal();
+});
 
+// Before/After slider
 const baSlider = document.getElementById('baSlider');
 const baHandle = document.getElementById('baHandle');
 const baAfter = document.querySelector('.ba-after');
@@ -305,13 +395,21 @@ if (baSlider && baHandle && baAfter) {
     baAfter.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
   };
 
-  baHandle.addEventListener('mousedown', () => isDragging = true);
-  baHandle.addEventListener('touchstart', () => isDragging = true, { passive: true });
-  window.addEventListener('mouseup', () => isDragging = false);
-  window.addEventListener('touchend', () => isDragging = false);
-  window.addEventListener('mousemove', (e) => { if (isDragging) updateSlider(e.clientX); });
-  window.addEventListener('touchmove', (e) => {
-    if (isDragging && e.touches[0]) updateSlider(e.touches[0].clientX);
-  }, { passive: true });
+  baHandle.addEventListener('mousedown', () => (isDragging = true));
+  baHandle.addEventListener('touchstart', () => (isDragging = true), {
+    passive: true
+  });
+  window.addEventListener('mouseup', () => (isDragging = false));
+  window.addEventListener('touchend', () => (isDragging = false));
+  window.addEventListener('mousemove', (e) => {
+    if (isDragging) updateSlider(e.clientX);
+  });
+  window.addEventListener(
+    'touchmove',
+    (e) => {
+      if (isDragging && e.touches[0]) updateSlider(e.touches[0].clientX);
+    },
+    { passive: true }
+  );
   baSlider.addEventListener('click', (e) => updateSlider(e.clientX));
 }
