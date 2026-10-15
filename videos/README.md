@@ -1,21 +1,19 @@
-# Videos
+# Videos — nombres de archivos
 
-## Proyectos y showreel
-- `video 01.mp4` → Fondo del hero (cinemático)
-- `video 02.mp4` → Proyecto 1
-- `video 03.mp4` → Proyecto 2
-- `video 04.mp4` → Proyecto 3
-- `video 05.mp4` → Proyecto 4
+## Hero (fondo del banner)
+- `video 01.mp4`
+
+## Proyectos (varios videos por proyecto)
+Video principal + extras:
+
+- Proyecto 02: `video 02.mp4`, `video 02.1.mp4`, `video 02.2.mp4`…
+- Proyecto 03: `video 03.mp4`, `video 03.1.mp4`…
+- Proyecto 04: `video 04.mp4`, `video 04.1.mp4`…
+- Proyecto 05: `video 05.mp4`, `video 05.1.mp4`…
 
 ## Antes / Después
-Coloca en esta misma carpeta:
+- `antes.jpg` (o `.png` / `.mp4`)
+- `despues.jpg` (o `.png` / `.mp4`)
 
-**Antes (RAW):**
-- `antes.jpg` o `antes.png` o `antes.mp4`
-- también acepta: `before.jpg` / `before.png` / `before.mp4`
-
-**Después (Final):**
-- `despues.jpg` o `despues.png` o `despues.mp4`
-- también acepta: `after.jpg` / `after.png` / `after.mp4`
-
-La web los carga automáticamente.
+## Descripciones de proyectos
+Edita el archivo: `data/projects.json`
