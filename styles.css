@@ -5,12 +5,12 @@
 }
 
 :root {
-  --bg: #0a0a0a;
-  --text: #f5f5f5;
-  --muted: #a0a0a0;
-  --accent: #c9a96e;
-  --card: #141414;
-  --border: #222;
+  --bg: #0F0F10;
+  --text: #FAFAFA;
+  --muted: #D4D4D8;
+  --accent: #FAFAFA;
+  --card: #1F1F23;
+  --border: #3F3F46;
 }
 
 body {
@@ -29,7 +29,7 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
-  background: rgba(10, 10, 10, 0.9);
+  background: rgba(15, 15, 16, 0.9);
   backdrop-filter: blur(10px);
   z-index: 100;
   border-bottom: 1px solid var(--border);
@@ -39,7 +39,7 @@ body {
   font-weight: 600;
   font-size: 1.25rem;
   letter-spacing: 2px;
-  color: var(--accent);
+  color: var(--text);
 }
 
 .nav a {
@@ -82,8 +82,8 @@ body {
 .btn {
   display: inline-block;
   padding: 0.85rem 2rem;
-  border: 1px solid var(--accent);
-  color: var(--accent);
+  border: 1px solid var(--border);
+  color: var(--text);
   text-decoration: none;
   font-size: 0.9rem;
   letter-spacing: 1px;
@@ -91,8 +91,9 @@ body {
 }
 
 .btn:hover {
-  background: var(--accent);
+  background: var(--text);
   color: var(--bg);
+  border-color: var(--text);
 }
 
 .works, .about, .contact {
@@ -122,13 +123,13 @@ h2 {
 }
 
 .card:hover {
-  border-color: var(--accent);
+  border-color: var(--muted);
 }
 
 .placeholder {
   width: 100%;
   aspect-ratio: 16/9;
-  background: #1a1a1a;
+  background: #17171a;
   margin-bottom: 1.25rem;
 }
 
