@@ -33,13 +33,15 @@ function probeVideo(src) {
     const v = document.createElement('video');
     v.preload = 'metadata';
     const done = (ok) => {
+      v.removeAttribute('src');
+      v.load();
       v.onloadeddata = null;
       v.onerror = null;
       resolve(ok ? src : null);
     };
     v.onloadeddata = () => done(true);
     v.onerror = () => done(false);
-    v.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
+    v.src = src;
   });
 }
 
@@ -73,7 +75,6 @@ async function findProjectVideos(id) {
   return found;
 }
 
-// Thumbnails: imagenes/imagen 02.jpg etc.
 function thumbCandidates(num) {
   const label = String(num).padStart(2, '0');
   const bases = [
@@ -101,7 +102,7 @@ function findThumbnail(num) {
       const img = new Image();
       img.onload = () => resolve(src);
       img.onerror = next;
-      img.src = src + (src.includes('?') ? '&' : '?') + 't=' + Date.now();
+      img.src = src;
     };
     next();
   });
@@ -113,34 +114,31 @@ function loadVideos() {
     const videoEl = slot.querySelector('.slot-video, .hero-video');
     const isHero = !!slot.querySelector('.hero-video');
 
-    // Catálogo: preferir miniatura de imagenes/
+    // Catálogo: solo miniatura de imagen (sin video en grid → evita parpadeo)
     if (!isHero) {
+      // Ocultar video del grid siempre
+      if (videoEl) {
+        videoEl.removeAttribute('src');
+        videoEl.hidden = true;
+        videoEl.load?.();
+      }
+
       findThumbnail(num).then(thumb => {
-        if (thumb) {
-          let img = slot.querySelector('.slot-thumb');
-          if (!img) {
-            img = document.createElement('img');
-            img.className = 'slot-thumb';
-            img.alt = '';
-            slot.appendChild(img);
-          }
-          img.src = thumb;
-          slot.classList.add('has-video');
-          const numberEl = slot.querySelector('.slot-number');
-          if (numberEl) numberEl.style.display = 'none';
-          if (videoEl) videoEl.hidden = true;
-          return;
+        if (!thumb) return; // se queda el número por defecto
+
+        let img = slot.querySelector('.slot-thumb');
+        if (!img) {
+          img = document.createElement('img');
+          img.className = 'slot-thumb';
+          img.alt = '';
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          slot.appendChild(img);
         }
-        // Fallback: video como miniatura
-        if (!videoEl) return;
-        findVideo(num).then(src => {
-          if (!src) return;
-          videoEl.src = src;
-          videoEl.hidden = false;
-          slot.classList.add('has-video');
-          const numberEl = slot.querySelector('.slot-number');
-          if (numberEl) numberEl.style.display = 'none';
-        });
+        img.src = thumb;
+        slot.classList.add('has-thumb');
+        const numberEl = slot.querySelector('.slot-number');
+        if (numberEl) numberEl.style.display = 'none';
       });
       return;
     }
@@ -275,7 +273,11 @@ projectCards.forEach(card => {
 
 function closeModal() {
   modal.hidden = true;
-  modalBody.querySelectorAll('video').forEach(v => v.pause());
+  modalBody.querySelectorAll('video').forEach(v => {
+    v.pause();
+    v.removeAttribute('src');
+    v.load();
+  });
 }
 
 if (modalClose) modalClose.addEventListener('click', closeModal);
