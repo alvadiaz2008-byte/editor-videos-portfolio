@@ -33,10 +33,7 @@ async function urlExists(src) {
     if (r.ok) return true;
   } catch (_) {}
   try {
-    const r = await fetch(src, {
-      method: 'GET',
-      headers: { Range: 'bytes=0-1' }
-    });
+    const r = await fetch(src, { method: 'GET', headers: { Range: 'bytes=0-1' } });
     return r.ok || r.status === 206;
   } catch (_) {
     return false;
@@ -184,31 +181,67 @@ const FALLBACK_PROJECTS = [
 
 function bindProjectScroller(stage, track) {
   const slides = () => [...track.querySelectorAll('.project-slide')];
+  let locking = false;
+  let snapTimer = 0;
+
+  const metrics = () => {
+    const n = slides().length;
+    const total = Math.max(stage.offsetHeight - window.innerHeight, 1);
+    const stageTop = stage.getBoundingClientRect().top + window.scrollY;
+    const scrolled = Math.min(Math.max(window.scrollY - stageTop, 0), total);
+    const pos = n <= 1 ? 0 : (scrolled / total) * (n - 1);
+    return { n, total, stageTop, pos };
+  };
 
   const update = () => {
     const items = slides();
-    const n = items.length;
+    const { n, pos } = metrics();
     if (!n) return;
-    const total = stage.offsetHeight - window.innerHeight;
-    const scrolled = Math.min(Math.max(-stage.getBoundingClientRect().top, 0), Math.max(total, 0));
-    const progress = total > 0 ? scrolled / total : 0;
-    const pos = progress * Math.max(n - 1, 0);
     const vw = track.parentElement.clientWidth || window.innerWidth;
     track.style.transform = `translate3d(${-pos * vw}px, 0, 0)`;
 
     items.forEach((slide, i) => {
-      const dist = Math.abs(i - pos);
-      const t = Math.max(0, 1 - dist);
-      const scale = 0.58 + 0.42 * t;
-      const opacity = 0.18 + 0.82 * t;
-      slide.style.transform = `scale(${scale})`;
+      const ad = Math.abs(i - pos);
+      let opacity = 0;
+      let scale = 0.72;
+      if (ad < 1) {
+        const t = 1 - ad;
+        opacity = t * t;
+        scale = 0.72 + 0.34 * t;
+      }
       slide.style.opacity = String(opacity);
+      slide.style.transform = `scale(${scale})`;
+      slide.style.visibility = opacity < 0.04 ? 'hidden' : 'visible';
       const vid = slide.querySelector('video');
       if (vid && vid.getAttribute('src')) {
-        if (dist < 0.55) vid.play().catch(() => {});
+        if (ad < 0.35) vid.play().catch(() => {});
         else vid.pause();
       }
     });
+  };
+
+  const snapTo = (index) => {
+    const { n, total, stageTop } = metrics();
+    if (n < 2) return;
+    const clamped = Math.min(n - 1, Math.max(0, index));
+    const step = total / (n - 1);
+    locking = true;
+    window.scrollTo({ top: stageTop + clamped * step, behavior: 'smooth' });
+    setTimeout(() => {
+      locking = false;
+      update();
+    }, 520);
+  };
+
+  const snapToNearest = () => {
+    if (locking) return;
+    const rect = stage.getBoundingClientRect();
+    if (rect.top > 40 || rect.bottom < window.innerHeight - 40) return;
+    const { n, pos } = metrics();
+    if (n < 2) return;
+    const nearest = Math.round(pos);
+    if (Math.abs(pos - nearest) < 0.04) return;
+    snapTo(nearest);
   };
 
   let ticking = false;
@@ -221,7 +254,12 @@ function bindProjectScroller(stage, track) {
     });
   };
 
-  window.addEventListener('scroll', request, { passive: true });
+  window.addEventListener('scroll', () => {
+    request();
+    if (locking) return;
+    clearTimeout(snapTimer);
+    snapTimer = setTimeout(snapToNearest, 140);
+  }, { passive: true });
   window.addEventListener('resize', request);
 
   let startX = 0;
@@ -229,15 +267,15 @@ function bindProjectScroller(stage, track) {
   stage.addEventListener('touchstart', (e) => {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
+    clearTimeout(snapTimer);
   }, { passive: true });
   stage.addEventListener('touchend', (e) => {
     const dx = e.changedTouches[0].clientX - startX;
     const dy = e.changedTouches[0].clientY - startY;
-    if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
-    const n = slides().length;
-    if (n < 2) return;
-    const step = (stage.offsetHeight - window.innerHeight) / (n - 1);
-    window.scrollBy({ top: dx < 0 ? step : -step, behavior: 'smooth' });
+    if (Math.abs(dx) < 42 || Math.abs(dx) < Math.abs(dy)) return;
+    const { pos } = metrics();
+    const base = Math.round(pos);
+    snapTo(base + (dx < 0 ? 1 : -1));
   }, { passive: true });
 
   update();
