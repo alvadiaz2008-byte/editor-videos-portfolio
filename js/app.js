@@ -153,9 +153,7 @@ function loadBeforeAfter() {
         v.src = src;
       } else {
         const img = new Image();
-        img.onload = () => {
-          targetImg.src = src;
-        };
+        img.onload = () => { targetImg.src = src; };
         img.onerror = next;
         img.src = src;
       }
@@ -198,7 +196,6 @@ function bindProjectScroller(stage, track) {
     const vw = track.parentElement.clientWidth || window.innerWidth;
     track.style.transform = `translate3d(${-pos * vw}px, 0, 0)`;
 
-    let active = 0;
     items.forEach((slide, i) => {
       const dist = Math.abs(i - pos);
       const t = Math.max(0, 1 - dist);
@@ -207,13 +204,11 @@ function bindProjectScroller(stage, track) {
       slide.style.transform = `scale(${scale})`;
       slide.style.opacity = String(opacity);
       const vid = slide.querySelector('video');
-      if (vid && vid.src) {
+      if (vid && vid.getAttribute('src')) {
         if (dist < 0.55) vid.play().catch(() => {});
         else vid.pause();
       }
-      if (dist < 0.5) active = i;
     });
-    stage.dataset.active = String(active);
   };
 
   let ticking = false;
@@ -229,30 +224,21 @@ function bindProjectScroller(stage, track) {
   window.addEventListener('scroll', request, { passive: true });
   window.addEventListener('resize', request);
 
-  // Swipe horizontal en móvil avanza el scroll de la página (mismo progreso)
   let startX = 0;
   let startY = 0;
-  stage.addEventListener(
-    'touchstart',
-    (e) => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    },
-    { passive: true }
-  );
-  stage.addEventListener(
-    'touchend',
-    (e) => {
-      const dx = e.changedTouches[0].clientX - startX;
-      const dy = e.changedTouches[0].clientY - startY;
-      if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
-      const n = slides().length;
-      if (n < 2) return;
-      const step = (stage.offsetHeight - window.innerHeight) / (n - 1);
-      window.scrollBy({ top: dx < 0 ? step : -step, behavior: 'smooth' });
-    },
-    { passive: true }
-  );
+  stage.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+    const n = slides().length;
+    if (n < 2) return;
+    const step = (stage.offsetHeight - window.innerHeight) / (n - 1);
+    window.scrollBy({ top: dx < 0 ? step : -step, behavior: 'smooth' });
+  }, { passive: true });
 
   update();
 }
@@ -274,10 +260,9 @@ async function initProjects() {
   const steps = Math.max(data.length - 1, 1);
   stage.style.height = `calc(100vh + ${steps} * 92vh)`;
 
-  track.innerHTML = data
-    .map((p) => {
-      const id = String(p.id).padStart(2, '0');
-      return `
+  track.innerHTML = data.map((p) => {
+    const id = String(p.id).padStart(2, '0');
+    return `
       <article class="project-slide" data-video="${id}">
         <div class="slide-video">
           <div class="slide-media">
@@ -294,8 +279,7 @@ async function initProjects() {
           </div>
         </div>
       </article>`;
-    })
-    .join('');
+  }).join('');
 
   track.querySelectorAll('.project-slide').forEach((slide) => {
     const id = slide.dataset.video;
@@ -304,11 +288,13 @@ async function initProjects() {
     findVideo(id).then((src) => {
       if (!src || !videoEl) return;
       videoEl.src = src;
+      const thumb = media.querySelector('.slot-thumb');
+      if (thumb) thumb.remove();
       const num = media.querySelector('.slot-number');
       if (num) num.style.display = 'none';
     });
     findThumbnail(id).then((thumb) => {
-      if (!thumb || media.querySelector('.slot-thumb')) return;
+      if (!thumb || videoEl.getAttribute('src') || media.querySelector('.slot-thumb')) return;
       const img = document.createElement('img');
       img.className = 'slot-thumb';
       img.alt = '';
@@ -330,7 +316,6 @@ const baAfter = document.querySelector('.ba-after');
 
 if (baSlider && baHandle && baAfter) {
   let isDragging = false;
-
   const updateSlider = (clientX) => {
     const rect = baSlider.getBoundingClientRect();
     let x = clientX - rect.left;
@@ -339,20 +324,13 @@ if (baSlider && baHandle && baAfter) {
     baHandle.style.left = `${percent}%`;
     baAfter.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
   };
-
   baHandle.addEventListener('mousedown', () => (isDragging = true));
   baHandle.addEventListener('touchstart', () => (isDragging = true), { passive: true });
   window.addEventListener('mouseup', () => (isDragging = false));
   window.addEventListener('touchend', () => (isDragging = false));
-  window.addEventListener('mousemove', (e) => {
-    if (isDragging) updateSlider(e.clientX);
-  });
-  window.addEventListener(
-    'touchmove',
-    (e) => {
-      if (isDragging && e.touches[0]) updateSlider(e.touches[0].clientX);
-    },
-    { passive: true }
-  );
+  window.addEventListener('mousemove', (e) => { if (isDragging) updateSlider(e.clientX); });
+  window.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches[0]) updateSlider(e.touches[0].clientX);
+  }, { passive: true });
   baSlider.addEventListener('click', (e) => updateSlider(e.clientX));
 }
