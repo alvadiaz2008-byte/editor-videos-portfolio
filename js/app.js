@@ -4,44 +4,8 @@ const nav = document.getElementById('nav');
 
 if (menuToggle && nav) {
   menuToggle.addEventListener('click', () => nav.classList.toggle('open'));
-  nav.querySelectorAll('a').forEach(link => {
+  nav.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => nav.classList.remove('open'));
-  });
-}
-
-// Project filters
-const filterBtns = document.querySelectorAll('.filter-btn');
-const projectCards = document.querySelectorAll('.project-card');
-
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const filter = btn.dataset.filter;
-    projectCards.forEach(card => {
-      if (filter === 'all' || card.dataset.category === filter) {
-        card.classList.remove('hidden');
-      } else {
-        card.classList.add('hidden');
-      }
-    });
-  });
-});
-
-// ---- Performance helpers ----
-function pauseAllPageVideos() {
-  document.querySelectorAll('video').forEach(v => {
-    if (!v.closest('#modal')) {
-      try { v.pause(); } catch (_) {}
-    }
-  });
-}
-
-function resumeVisibleVideos() {
-  document.querySelectorAll('video[data-auto-play]').forEach(v => {
-    if (v.dataset.shouldPlay === '1') {
-      v.play().catch(() => {});
-    }
   });
 }
 
@@ -50,7 +14,7 @@ function observeVideoVisibility(video, rootEl) {
   video.dataset.autoPlay = '1';
   const io = new IntersectionObserver(
     ([entry]) => {
-      if (entry.isIntersecting && !modalOpen) {
+      if (entry.isIntersecting) {
         video.dataset.shouldPlay = '1';
         video.play().catch(() => {});
       } else {
@@ -68,7 +32,6 @@ async function urlExists(src) {
     const r = await fetch(src, { method: 'HEAD' });
     if (r.ok) return true;
   } catch (_) {}
-  // fallback: lightweight range check
   try {
     const r = await fetch(src, {
       method: 'GET',
@@ -91,34 +54,10 @@ function videoCandidates(label) {
 
 async function findVideo(label) {
   const candidates = videoCandidates(label);
-  // parallel checks — faster load
   const checks = await Promise.all(
     candidates.map(async (src) => ((await urlExists(src)) ? src : null))
   );
   return checks.find(Boolean) || null;
-}
-
-async function findProjectVideos(id) {
-  const found = [];
-  const main = await findVideo(id);
-  if (main) found.push(main);
-
-  // check extras in parallel batches of 3
-  for (let i = 1; i <= 8; i += 3) {
-    const batch = [];
-    for (let j = i; j < i + 3 && j <= 8; j++) {
-      batch.push(findVideo(`${id}.${j}`));
-    }
-    const results = await Promise.all(batch);
-    let stop = false;
-    results.forEach((src) => {
-      if (stop) return;
-      if (src) found.push(src);
-      else stop = true;
-    });
-    if (stop) break;
-  }
-  return found;
 }
 
 function thumbCandidates(num) {
@@ -154,65 +93,28 @@ function findThumbnail(num) {
   });
 }
 
-function loadVideos() {
-  document.querySelectorAll('[data-video]').forEach((el) => {
-    const num = String(el.dataset.video).padStart(2, '0');
-    const isHero = el.classList.contains('hero-bg');
-
-    if (isHero) {
-      const videoEl = el.querySelector('.hero-video');
-      if (!videoEl) return;
-      videoEl.preload = 'metadata';
-      videoEl.muted = true;
-      videoEl.playsInline = true;
-      videoEl.loop = true;
-
-      findVideo(num).then((src) => {
-        if (!src) return;
-        videoEl.src = src;
-        videoEl.hidden = false;
-        el.classList.add('has-video');
-        const numberEl = el.querySelector('.slot-number');
-        if (numberEl) numberEl.style.display = 'none';
-        observeVideoVisibility(videoEl, el.closest('.hero') || el);
-      });
-      return;
-    }
-
-    const mediaBox = el.querySelector('.video-slot');
-    if (!mediaBox) return;
-
-    const videoEl = mediaBox.querySelector('.slot-video');
-    if (videoEl) {
-      videoEl.removeAttribute('src');
-      videoEl.hidden = true;
-      try {
-        videoEl.load();
-      } catch (_) {}
-    }
-
-    el.querySelectorAll(':scope > .slot-thumb').forEach((n) => n.remove());
-
-    findThumbnail(num).then((thumb) => {
-      if (!thumb) return;
-      let img = mediaBox.querySelector('.slot-thumb');
-      if (!img) {
-        img = document.createElement('img');
-        img.className = 'slot-thumb';
-        img.alt = '';
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        mediaBox.appendChild(img);
-      }
-      img.src = thumb;
-      mediaBox.classList.add('has-thumb');
-      const numberEl = mediaBox.querySelector('.slot-number');
-      if (numberEl) numberEl.style.display = 'none';
-    });
+function loadHero() {
+  const el = document.querySelector('.hero-bg[data-video]');
+  if (!el) return;
+  const num = String(el.dataset.video).padStart(2, '0');
+  const videoEl = el.querySelector('.hero-video');
+  if (!videoEl) return;
+  videoEl.preload = 'metadata';
+  videoEl.muted = true;
+  videoEl.playsInline = true;
+  videoEl.loop = true;
+  findVideo(num).then((src) => {
+    if (!src) return;
+    videoEl.src = src;
+    videoEl.hidden = false;
+    el.classList.add('has-video');
+    const numberEl = el.querySelector('.slot-number');
+    if (numberEl) numberEl.style.display = 'none';
+    observeVideoVisibility(videoEl, el.closest('.hero') || el);
   });
 }
 
-loadVideos();
+loadHero();
 
 function loadBeforeAfter() {
   const beforeEl = document.getElementById('beforeImg');
@@ -221,24 +123,14 @@ function loadBeforeAfter() {
   if (!beforeEl || !afterEl) return;
 
   const beforeNames = [
-    'videos/antes.jpg',
-    'videos/antes.png',
-    'videos/antes.webp',
-    'videos/before.jpg',
-    'videos/before.png',
-    'videos/before.webp',
-    'videos/antes.mp4',
-    'videos/before.mp4'
+    'videos/antes.jpg', 'videos/antes.png', 'videos/antes.webp',
+    'videos/before.jpg', 'videos/before.png', 'videos/before.webp',
+    'videos/antes.mp4', 'videos/before.mp4'
   ];
   const afterNames = [
-    'videos/despues.jpg',
-    'videos/despues.png',
-    'videos/despues.webp',
-    'videos/after.jpg',
-    'videos/after.png',
-    'videos/after.webp',
-    'videos/despues.mp4',
-    'videos/after.mp4'
+    'videos/despues.jpg', 'videos/despues.png', 'videos/despues.webp',
+    'videos/after.jpg', 'videos/after.png', 'videos/after.webp',
+    'videos/despues.mp4', 'videos/after.mp4'
   ];
 
   const tryLoad = (names, targetImg) => {
@@ -277,108 +169,161 @@ function loadBeforeAfter() {
 
 loadBeforeAfter();
 
-let projectsData = [];
-let modalOpen = false;
-
-fetch('data/projects.json')
-  .then((r) => r.json())
-  .then((data) => {
-    projectsData = data;
-    data.forEach((p) => {
-      const card = document.querySelector(`.project-card[data-video="${p.id}"]`);
-      if (!card) return;
-      const h3 = card.querySelector('h3');
-      const pEl = card.querySelector('.card-info p');
-      const cat = card.querySelector('.category');
-      if (h3) h3.textContent = p.titulo;
-      if (pEl)
-        pEl.textContent =
-          p.descripcion.split('\n')[0].slice(0, 90) +
-          (p.descripcion.length > 90 ? '…' : '');
-      if (cat) cat.textContent = p.categoria;
-    });
-  })
-  .catch(() => {});
-
-const modal = document.getElementById('modal');
-const modalBody = document.getElementById('modalBody');
-const modalClose = document.getElementById('modalClose');
-
-projectCards.forEach((card) => {
-  card.addEventListener('click', async () => {
-    const id = String(card.dataset.video).padStart(2, '0');
-    const fromJson = projectsData.find((p) => p.id === id);
-
-    const title = fromJson?.titulo || card.querySelector('h3')?.textContent || '';
-    const desc =
-      fromJson?.descripcion || card.querySelector('p')?.textContent || '';
-    const cat =
-      fromJson?.categoria || card.querySelector('.category')?.textContent || '';
-
-    // pause background media while modal is open
-    modalOpen = true;
-    pauseAllPageVideos();
-
-    modalBody.innerHTML = `
-      <div class="modal-layout">
-        <div class="modal-videos" id="modalVideos">
-          <div class="modal-video-wrap" style="color:var(--muted);font-size:0.9rem;">Cargando…</div>
-        </div>
-        <div class="modal-info">
-          <span class="category">${cat}</span>
-          <h3>${title}</h3>
-          <p>${desc}</p>
-        </div>
-      </div>
-    `;
-    modal.hidden = false;
-
-    const videos = await findProjectVideos(id);
-    const container = document.getElementById('modalVideos');
-    if (!container) return;
-
-    if (videos.length === 0) {
-      container.innerHTML = `<div class="modal-video-wrap" style="color:var(--muted);font-size:0.9rem;">Sin videos para este proyecto</div>`;
-      return;
-    }
-
-    container.innerHTML = videos
-      .map(
-        (src, i) => `
-      <div class="modal-video-wrap">
-        <video
-          src="${src}"
-          controls
-          playsinline
-          preload="${i === 0 ? 'auto' : 'none'}"
-          ${i === 0 ? 'autoplay' : ''}
-        ></video>
-      </div>`
-      )
-      .join('');
-  });
-});
-
-function closeModal() {
-  modalOpen = false;
-  modal.hidden = true;
-  modalBody.querySelectorAll('video').forEach((v) => {
-    v.pause();
-    v.removeAttribute('src');
-    try {
-      v.load();
-    } catch (_) {}
-  });
-  modalBody.innerHTML = '';
-  resumeVisibleVideos();
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"');
 }
 
-if (modalClose) modalClose.addEventListener('click', closeModal);
-modal?.addEventListener('click', (e) => {
-  if (e.target === modal) closeModal();
-});
+const FALLBACK_PROJECTS = [
+  { id: '02', categoria: 'Shorts / Reels', titulo: 'Reel Dinámico Marca X', descripcion: 'Edición rápida, ritmo y texto impactante.' },
+  { id: '03', categoria: 'Promocionales', titulo: 'Spot Comercial', descripcion: 'Color grading y narrativa persuasiva.' },
+  { id: '04', categoria: 'YouTube / Largo', titulo: 'Documental Corto', descripcion: 'Storytelling y postproducción completa.' },
+  { id: '05', categoria: 'Shorts / Reels', titulo: 'Serie de Reels', descripcion: 'Consistencia visual y engagement.' }
+];
 
-// Before/After slider
+function bindProjectScroller(stage, track) {
+  const slides = () => [...track.querySelectorAll('.project-slide')];
+
+  const update = () => {
+    const items = slides();
+    const n = items.length;
+    if (!n) return;
+    const total = stage.offsetHeight - window.innerHeight;
+    const scrolled = Math.min(Math.max(-stage.getBoundingClientRect().top, 0), Math.max(total, 0));
+    const progress = total > 0 ? scrolled / total : 0;
+    const pos = progress * Math.max(n - 1, 0);
+    const vw = track.parentElement.clientWidth || window.innerWidth;
+    track.style.transform = `translate3d(${-pos * vw}px, 0, 0)`;
+
+    let active = 0;
+    items.forEach((slide, i) => {
+      const dist = Math.abs(i - pos);
+      const t = Math.max(0, 1 - dist);
+      const scale = 0.58 + 0.42 * t;
+      const opacity = 0.18 + 0.82 * t;
+      slide.style.transform = `scale(${scale})`;
+      slide.style.opacity = String(opacity);
+      const vid = slide.querySelector('video');
+      if (vid && vid.src) {
+        if (dist < 0.55) vid.play().catch(() => {});
+        else vid.pause();
+      }
+      if (dist < 0.5) active = i;
+    });
+    stage.dataset.active = String(active);
+  };
+
+  let ticking = false;
+  const request = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      update();
+    });
+  };
+
+  window.addEventListener('scroll', request, { passive: true });
+  window.addEventListener('resize', request);
+
+  // Swipe horizontal en móvil avanza el scroll de la página (mismo progreso)
+  let startX = 0;
+  let startY = 0;
+  stage.addEventListener(
+    'touchstart',
+    (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    },
+    { passive: true }
+  );
+  stage.addEventListener(
+    'touchend',
+    (e) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+      const n = slides().length;
+      if (n < 2) return;
+      const step = (stage.offsetHeight - window.innerHeight) / (n - 1);
+      window.scrollBy({ top: dx < 0 ? step : -step, behavior: 'smooth' });
+    },
+    { passive: true }
+  );
+
+  update();
+}
+
+async function initProjects() {
+  const stage = document.getElementById('proyectos');
+  const track = document.getElementById('projectsTrack');
+  if (!stage || !track) return;
+
+  let data = FALLBACK_PROJECTS;
+  try {
+    const r = await fetch('data/projects.json');
+    if (r.ok) {
+      const json = await r.json();
+      if (Array.isArray(json) && json.length) data = json;
+    }
+  } catch (_) {}
+
+  const steps = Math.max(data.length - 1, 1);
+  stage.style.height = `calc(100vh + ${steps} * 92vh)`;
+
+  track.innerHTML = data
+    .map((p) => {
+      const id = String(p.id).padStart(2, '0');
+      return `
+      <article class="project-slide" data-video="${id}">
+        <div class="slide-video">
+          <div class="slide-media">
+            <span class="slot-number">${id}</span>
+            <video class="slide-vid" muted playsinline loop preload="metadata"></video>
+          </div>
+        </div>
+        <div class="slide-copy">
+          <span class="proj-num">${id}</span>
+          <div class="proj-desc-box">
+            <span class="category">${escapeHtml(p.categoria)}</span>
+            <h3>${escapeHtml(p.titulo)}</h3>
+            <p>${escapeHtml(p.descripcion)}</p>
+          </div>
+        </div>
+      </article>`;
+    })
+    .join('');
+
+  track.querySelectorAll('.project-slide').forEach((slide) => {
+    const id = slide.dataset.video;
+    const media = slide.querySelector('.slide-media');
+    const videoEl = slide.querySelector('video');
+    findVideo(id).then((src) => {
+      if (!src || !videoEl) return;
+      videoEl.src = src;
+      const num = media.querySelector('.slot-number');
+      if (num) num.style.display = 'none';
+    });
+    findThumbnail(id).then((thumb) => {
+      if (!thumb || media.querySelector('.slot-thumb')) return;
+      const img = document.createElement('img');
+      img.className = 'slot-thumb';
+      img.alt = '';
+      img.src = thumb;
+      media.appendChild(img);
+      const num = media.querySelector('.slot-number');
+      if (num) num.style.display = 'none';
+    });
+  });
+
+  bindProjectScroller(stage, track);
+}
+
+initProjects();
+
 const baSlider = document.getElementById('baSlider');
 const baHandle = document.getElementById('baHandle');
 const baAfter = document.querySelector('.ba-after');
@@ -396,9 +341,7 @@ if (baSlider && baHandle && baAfter) {
   };
 
   baHandle.addEventListener('mousedown', () => (isDragging = true));
-  baHandle.addEventListener('touchstart', () => (isDragging = true), {
-    passive: true
-  });
+  baHandle.addEventListener('touchstart', () => (isDragging = true), { passive: true });
   window.addEventListener('mouseup', () => (isDragging = false));
   window.addEventListener('touchend', () => (isDragging = false));
   window.addEventListener('mousemove', (e) => {
