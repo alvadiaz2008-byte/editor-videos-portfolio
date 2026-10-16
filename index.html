@@ -10,13 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="bg-decor" aria-hidden="true"></div>
-
   <header class="header">
     <a href="#inicio" class="logo">Studio ED</a>
     <nav class="nav" id="nav">
       <a href="#inicio">Inicio</a>
-      <a href="#proyectos">Proyectos</a>
+      <a href="#proyectos">Mis Proyectos</a>
       <a href="#antes-despues">Antes/Después</a>
       <a href="#sobre">Sobre Mí</a>
       <a href="#contacto">Contacto</a>
@@ -42,66 +40,20 @@
       </div>
     </section>
 
-    <section id="proyectos" class="projects">
-      <div class="section-panel">
-        <h2>Proyectos Destacados</h2>
-        <div class="filters" id="filters">
-          <button class="filter-btn active" data-filter="all">Todos</button>
-          <button class="filter-btn" data-filter="shorts">Shorts / Reels</button>
-          <button class="filter-btn" data-filter="promo">Promocionales</button>
-          <button class="filter-btn" data-filter="youtube">YouTube / Largo</button>
+    <section id="proyectos" class="projects-stage">
+      <div class="projects-sticky">
+        <div class="projects-head">
+          <h2>Mis Proyectos</h2>
+          <p class="projects-hint">Desliza para recorrer los trabajos</p>
         </div>
-        <div class="project-grid" id="projectGrid">
-          <article class="project-card" data-category="shorts" data-video="02">
-            <div class="video-slot thumb">
-              <span class="slot-number">02</span>
-              <video muted playsinline preload="metadata" class="slot-video" hidden></video>
-            </div>
-            <div class="card-info">
-              <span class="category">Shorts / Reels</span>
-              <h3>Reel Dinámico Marca X</h3>
-              <p>Edición rápida, ritmo y texto impactante.</p>
-            </div>
-          </article>
-          <article class="project-card" data-category="promo" data-video="03">
-            <div class="video-slot thumb">
-              <span class="slot-number">03</span>
-              <video muted playsinline preload="metadata" class="slot-video" hidden></video>
-            </div>
-            <div class="card-info">
-              <span class="category">Promocionales</span>
-              <h3>Spot Comercial</h3>
-              <p>Color grading y narrativa persuasiva.</p>
-            </div>
-          </article>
-          <article class="project-card" data-category="youtube" data-video="04">
-            <div class="video-slot thumb">
-              <span class="slot-number">04</span>
-              <video muted playsinline preload="metadata" class="slot-video" hidden></video>
-            </div>
-            <div class="card-info">
-              <span class="category">YouTube / Largo</span>
-              <h3>Documental Corto</h3>
-              <p>Storytelling y postproducción completa.</p>
-            </div>
-          </article>
-          <article class="project-card" data-category="shorts" data-video="05">
-            <div class="video-slot thumb">
-              <span class="slot-number">05</span>
-              <video muted playsinline preload="metadata" class="slot-video" hidden></video>
-            </div>
-            <div class="card-info">
-              <span class="category">Shorts / Reels</span>
-              <h3>Serie de Reels</h3>
-              <p>Consistencia visual y engagement.</p>
-            </div>
-          </article>
+        <div class="projects-viewport">
+          <div class="projects-track" id="projectsTrack"></div>
         </div>
       </div>
     </section>
 
     <section id="antes-despues" class="before-after">
-      <div class="section-panel">
+      <div class="wide">
         <h2>Antes / Después</h2>
         <p class="section-desc">Transformación mediante color grading y retoque profesional.</p>
         <div class="ba-slider" id="baSlider">
@@ -120,30 +72,28 @@
     </section>
 
     <section id="sobre" class="about">
-      <div class="section-panel">
-        <div class="about-grid">
-          <div class="about-text">
-            <h2>Sobre Mí</h2>
-            <p>Editor de video profesional enfocado en entregar piezas audiovisuales claras, impactantes y orientadas a resultados. Cada proyecto se aborda con rigor técnico, atención al detalle y comunicación constante para generar confianza y valor real a clientes y marcas.</p>
-            <p>Mi objetivo es que el contenido no solo se vea bien, sino que cumpla su propósito: captar atención, transmitir el mensaje y convertir.</p>
-          </div>
-          <div class="tools">
-            <h3>Herramientas</h3>
-            <div class="badges">
-              <span class="badge">DaVinci Resolve</span>
-              <span class="badge">Adobe Premiere Pro</span>
-              <span class="badge">After Effects</span>
-              <span class="badge">CapCut</span>
-              <span class="badge">Photoshop</span>
-              <span class="badge">Audition</span>
-            </div>
+      <div class="wide about-grid">
+        <div class="about-text">
+          <h2>Sobre Mí</h2>
+          <p>Editor de video profesional enfocado en entregar piezas audiovisuales claras, impactantes y orientadas a resultados. Cada proyecto se aborda con rigor técnico, atención al detalle y comunicación constante para generar confianza y valor real a clientes y marcas.</p>
+          <p>Mi objetivo es que el contenido no solo se vea bien, sino que cumpla su propósito: captar atención, transmitir el mensaje y convertir.</p>
+        </div>
+        <div class="tools">
+          <h3>Herramientas</h3>
+          <div class="badges">
+            <span class="badge">DaVinci Resolve</span>
+            <span class="badge">Adobe Premiere Pro</span>
+            <span class="badge">After Effects</span>
+            <span class="badge">CapCut</span>
+            <span class="badge">Photoshop</span>
+            <span class="badge">Audition</span>
           </div>
         </div>
       </div>
     </section>
 
     <section id="contacto" class="contact">
-      <div class="section-panel">
+      <div class="wide">
         <h2>¿Tienes un proyecto en mente?</h2>
         <p>Hablemos y hagamos que tu contenido destaque.</p>
         <div class="contact-actions">
@@ -160,17 +110,10 @@
   </main>
 
   <footer class="footer">
-    <div class="container">
+    <div class="wide">
       <p>© 2026 Studio ED · Editor de Video Profesional</p>
     </div>
   </footer>
-
-  <div class="modal" id="modal" hidden>
-    <div class="modal-content">
-      <button class="modal-close" id="modalClose">×</button>
-      <div class="modal-body" id="modalBody"></div>
-    </div>
-  </div>
 
   <script src="js/app.js" type="module"></script>
 </body>
