@@ -33,6 +33,7 @@ body {
   overflow-x: hidden;
 }
 
+/* Fondo ambiental — luces suaves + rejilla cinematográfica */
 .bg-decor {
   position: fixed;
   inset: 0;
@@ -41,58 +42,62 @@ body {
   overflow: hidden;
 }
 
-.decor-circle {
+.bg-glow {
   position: absolute;
   border-radius: 50%;
-  border: 1.5px dashed rgba(194, 169, 122, 0.14);
-  animation: spin 60s linear infinite;
+  filter: blur(80px);
+  opacity: 0.45;
+  animation: floatGlow 18s ease-in-out infinite;
 }
 
-.decor-circle.c1 {
-  width: 280px;
-  height: 280px;
-  top: 12%;
-  left: -60px;
-  animation-duration: 80s;
+.bg-glow.g1 {
+  width: 520px;
+  height: 520px;
+  top: -120px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(194, 169, 122, 0.35) 0%, transparent 70%);
 }
 
-.decor-circle.c2 {
-  width: 180px;
-  height: 180px;
-  top: 55%;
-  right: -40px;
+.bg-glow.g2 {
+  width: 420px;
+  height: 420px;
+  top: 35%;
+  right: -140px;
+  background: radial-gradient(circle, rgba(155, 152, 146, 0.28) 0%, transparent 70%);
+  animation-duration: 22s;
   animation-direction: reverse;
-  animation-duration: 50s;
-  border-color: rgba(155, 152, 146, 0.12);
 }
 
-.decor-circle.c3 {
-  width: 120px;
-  height: 120px;
-  bottom: 15%;
-  left: 18%;
-  animation-duration: 40s;
+.bg-glow.g3 {
+  width: 380px;
+  height: 380px;
+  bottom: -80px;
+  left: 20%;
+  background: radial-gradient(circle, rgba(194, 169, 122, 0.22) 0%, transparent 70%);
+  animation-duration: 26s;
 }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+@keyframes floatGlow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -24px) scale(1.08); }
 }
 
-.decor-line {
+.bg-grid {
   position: absolute;
-  background: linear-gradient(90deg, transparent, rgba(194, 169, 122, 0.1), transparent);
-  height: 1px;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(243, 241, 236, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(243, 241, 236, 0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 75%);
 }
 
-.decor-line.l1 { width: 40%; top: 28%; right: 0; }
-.decor-line.l2 {
-  width: 25%;
-  top: 70%;
-  left: 5%;
-  background: linear-gradient(90deg, transparent, rgba(155, 152, 146, 0.1), transparent);
+.bg-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(11, 11, 12, 0.75) 100%);
 }
-.decor-line.l3 { width: 30%; bottom: 22%; right: 12%; }
 
 main, .header, .footer, .modal { position: relative; z-index: 1; }
 
@@ -159,7 +164,6 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
   cursor: pointer;
 }
 
-/* Banner más corto: se ve un poco de proyectos al entrar */
 .hero {
   position: relative;
   min-height: 52vh;
@@ -717,8 +721,9 @@ main, .header, .footer, .modal { position: relative; z-index: 1; }
     min-height: 46vh;
     height: 46vh;
   }
-  .decor-circle.c1 { width: 180px; height: 180px; }
-  .decor-circle.c2 { width: 120px; height: 120px; }
+  .bg-glow.g1 { width: 280px; height: 280px; }
+  .bg-glow.g2 { width: 220px; height: 220px; }
+  .bg-glow.g3 { width: 200px; height: 200px; }
   .about-grid { grid-template-columns: 1fr; }
   .modal-content { padding: 1.25rem; border-radius: 18px; }
   .modal-layout {
