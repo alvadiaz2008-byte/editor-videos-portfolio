@@ -1,7 +1,7 @@
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var nodes = [];
-  ['.projects-head', '.before-after .wide', '.about .wide', '.contact .wide', '.footer .wide'].forEach(function (sel) {
+  ['.before-after .wide', '.about .wide', '.contact .wide', '.footer .wide'].forEach(function (sel) {
     document.querySelectorAll(sel).forEach(function (el) { nodes.push(el); });
   });
 
