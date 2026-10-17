@@ -1,17 +1,33 @@
 (function () {
+  var root = document.documentElement;
   var btn = document.querySelector('.hero-ctas .btn-primary');
   var hero = document.getElementById('inicio');
   if (!btn || !hero) return;
 
-  btn.addEventListener('click', function (e) {
-    var stage = document.getElementById('proyectos');
-    if (!stage) return;
-    e.preventDefault();
+  root.classList.add('locked');
+  if (history.scrollRestoration) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
 
-    if (document.body.classList.contains('bridging')) return;
+  function blockScroll(e) {
+    if (root.classList.contains('locked')) e.preventDefault();
+  }
+  window.addEventListener('wheel', blockScroll, { passive: false });
+  window.addEventListener('touchmove', blockScroll, { passive: false });
+  window.addEventListener('keydown', function (e) {
+    if (!root.classList.contains('locked')) return;
+    if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End'].indexOf(e.key) !== -1) {
+      e.preventDefault();
+    }
+  });
+
+  function openProjects() {
+    var stage = document.getElementById('proyectos');
+    if (!stage || document.body.classList.contains('bridging') || root.classList.contains('entered')) return;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      stage.scrollIntoView();
+      root.classList.remove('locked');
+      root.classList.add('entered');
+      window.scrollTo(0, stage.offsetTop);
       return;
     }
 
@@ -27,6 +43,8 @@
 
     hero.classList.add('is-bridge');
     document.body.classList.add('bridging');
+    root.classList.add('opening');
+    root.classList.remove('locked');
 
     [title, hint, view].forEach(function (el) {
       if (el) el.classList.add('assembling');
@@ -45,9 +63,10 @@
     document.body.appendChild(ghost);
     btn.style.visibility = 'hidden';
 
+    var move = '1.7s cubic-bezier(.77,0,.18,1)';
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
-        ghost.style.transition = 'left 1.05s cubic-bezier(.77,0,.18,1), top 1.05s cubic-bezier(.77,0,.18,1), width 1.05s cubic-bezier(.77,0,.18,1), height 1.05s cubic-bezier(.77,0,.18,1), border-radius 1s cubic-bezier(.77,0,.18,1), background .7s ease, color .55s ease, font-size .9s cubic-bezier(.77,0,.18,1), padding .8s ease, box-shadow .5s ease, opacity .45s ease, letter-spacing .8s ease';
+        ghost.style.transition = 'left ' + move + ', top ' + move + ', width ' + move + ', height ' + move + ', border-radius 1.5s cubic-bezier(.77,0,.18,1), background 1.1s ease, color .9s ease, font-size 1.4s cubic-bezier(.77,0,.18,1), padding 1.2s ease, box-shadow .8s ease, opacity .6s ease, letter-spacing 1.2s ease';
         ghost.style.left = to.left + 'px';
         ghost.style.top = to.top + 'px';
         ghost.style.width = Math.max(to.width, 160) + 'px';
@@ -66,10 +85,6 @@
     });
 
     setTimeout(function () {
-      ghost.textContent = 'Mis Proyectos';
-    }, 460);
-
-    setTimeout(function () {
       [title, hint, view].forEach(function (el) {
         if (!el) return;
         el.classList.remove('assembling');
@@ -77,7 +92,7 @@
       });
       ghost.style.opacity = '0';
       hero.classList.add('bridge-fade');
-    }, 1080);
+    }, 1750);
 
     setTimeout(function () {
       if (placeholder.parentNode) placeholder.parentNode.removeChild(placeholder);
@@ -85,11 +100,25 @@
       document.body.classList.remove('bridging');
       btn.style.visibility = '';
       if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
+      root.classList.add('entered');
+      root.classList.remove('opening');
       window.scrollTo(0, stage.offsetTop);
       [title, hint, view].forEach(function (el) {
         if (!el) return;
         el.classList.remove('assembling', 'assemble');
       });
-    }, 2000);
+    }, 3100);
+  }
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!link || root.classList.contains('entered')) return;
+    var href = link.getAttribute('href');
+    if (href === '#proyectos') {
+      e.preventDefault();
+      openProjects();
+      return;
+    }
+    if (href !== '#inicio') e.preventDefault();
   });
 })();
