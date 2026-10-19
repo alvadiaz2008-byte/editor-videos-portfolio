@@ -40,7 +40,7 @@
   function showHero() {
     resetCopy();
     document.body.classList.remove('bridging');
-    root.classList.remove('entered', 'opening');
+    root.classList.remove('entered', 'opening', 'move-in');
     root.classList.add('locked');
     sitio.scrollTop = 0;
     var video = hero.querySelector('video');
@@ -70,12 +70,11 @@
 
     var title = sitio.querySelector('.projects-head h2');
     var hint = sitio.querySelector('.projects-hint');
-    var view = sitio.querySelector('.projects-viewport');
     var from = btn.getBoundingClientRect();
 
     document.body.classList.add('bridging');
     root.classList.add('opening');
-    hero.style.zIndex = '130';
+    hero.style.zIndex = '120';
     sitio.scrollTop = 0;
 
     copyEls().forEach(function (el) {
@@ -85,7 +84,7 @@
     });
     void hero.offsetWidth;
 
-    [title, hint, view].forEach(function (el) {
+    [title, hint].forEach(function (el) {
       if (el) el.classList.add('assembling');
     });
 
@@ -102,35 +101,36 @@
 
     var move = '1.7s cubic-bezier(.77,0,.18,1)';
     requestAnimationFrame(function () {
+      root.classList.add('move-in');
       copyEls().forEach(function (el) {
-        el.style.transition = 'transform 1.7s cubic-bezier(.77,0,.18,1)';
+        el.style.transition = move;
+        el.style.transitionProperty = 'transform';
         el.style.transform = 'translateY(-120vh)';
       });
-      requestAnimationFrame(function () {
-        ghost.style.transition = 'left ' + move + ', top ' + move + ', width ' + move + ', height ' + move + ', border-radius 1.5s cubic-bezier(.77,0,.18,1), background 1.1s ease, color .9s ease, font-size 1.4s cubic-bezier(.77,0,.18,1), padding 1.2s ease, box-shadow .8s ease, opacity .55s ease, letter-spacing 1.2s ease';
-        ghost.style.left = to.left + 'px';
-        ghost.style.top = to.top + 'px';
-        ghost.style.width = Math.max(to.width, 160) + 'px';
-        ghost.style.height = to.height + 'px';
-        ghost.style.borderRadius = '0px';
-        ghost.style.background = 'transparent';
-        ghost.style.color = '#f3f1ec';
-        ghost.style.boxShadow = 'none';
-        ghost.style.padding = '0px';
-        ghost.style.fontSize = getComputedStyle(title).fontSize;
-        ghost.style.fontWeight = '600';
-        ghost.style.letterSpacing = '-0.3px';
-        ghost.style.justifyContent = 'flex-start';
-        ghost.style.textAlign = 'left';
-      });
+      ghost.style.transition = 'left ' + move + ', top ' + move + ', width ' + move + ', height ' + move + ', border-radius ' + move + ', background ' + move + ', color ' + move + ', font-size ' + move + ', padding ' + move + ', box-shadow ' + move + ', letter-spacing ' + move;
+      ghost.style.left = to.left + 'px';
+      ghost.style.top = to.top + 'px';
+      ghost.style.width = Math.max(to.width, 160) + 'px';
+      ghost.style.height = to.height + 'px';
+      ghost.style.borderRadius = '0px';
+      ghost.style.background = 'transparent';
+      ghost.style.color = '#f3f1ec';
+      ghost.style.boxShadow = 'none';
+      ghost.style.padding = '0px';
+      ghost.style.fontSize = getComputedStyle(title).fontSize;
+      ghost.style.fontWeight = '600';
+      ghost.style.letterSpacing = '-0.3px';
+      ghost.style.justifyContent = 'flex-start';
+      ghost.style.textAlign = 'left';
     });
 
     setTimeout(function () {
-      [title, hint, view].forEach(function (el) {
+      [title, hint].forEach(function (el) {
         if (!el) return;
         el.classList.remove('assembling');
         el.classList.add('assemble');
       });
+      ghost.style.transition = 'opacity .45s ease';
       ghost.style.opacity = '0';
       root.classList.add('entered');
       root.classList.remove('locked');
@@ -141,17 +141,18 @@
         var dest = document.getElementById(thenId);
         if (dest) sitio.scrollTop = dest.offsetTop;
       }
-    }, 1750);
+    }, 1700);
 
     setTimeout(function () {
       document.body.classList.remove('bridging');
+      root.classList.remove('move-in');
       resetCopy();
       btn.style.visibility = '';
       if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
-      [title, hint, view].forEach(function (el) {
+      [title, hint].forEach(function (el) {
         if (el) el.classList.remove('assembling', 'assemble');
       });
-    }, 3100);
+    }, 2300);
   }
 
   document.addEventListener('click', function (e) {
