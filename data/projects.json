@@ -1,27 +1,27 @@
 [
   {
-    "id": "02",
+    "id": "01",
     "categoria": "Shorts / Reels",
     "titulo": "Reel Dinámico Marca X",
     "descripcion": "Edición rápida, ritmo y texto impactante. Aquí puedes escribir todo el detalle del proyecto: cliente, objetivo, duración, herramientas usadas y resultados.",
     "filtro": "shorts"
   },
   {
-    "id": "03",
+    "id": "02",
     "categoria": "Promocionales",
     "titulo": "Maison D`emori",
     "descripcion": "Video de presentacion de un nuevo proyecto, edicion centrada en llamar la atencion del publico y crear la sensacion de que algo increible está por llegar.",
     "filtro": "promo"
   },
   {
-    "id": "04",
+    "id": "03",
     "categoria": "YouTube / Largo",
     "titulo": "Documental Corto",
     "descripcion": "Storytelling y postproducción completa. Describe la historia, el estilo visual y el mensaje final.",
     "filtro": "youtube"
   },
   {
-    "id": "05",
+    "id": "04",
     "categoria": "Shorts / Reels",
     "titulo": "Serie de Reels",
     "descripcion": "Consistencia visual y engagement. Explica cuántos reels, el concepto de la serie y el rendimiento.",
