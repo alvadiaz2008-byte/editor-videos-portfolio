@@ -20,17 +20,29 @@
     if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End'].indexOf(e.key) !== -1) e.preventDefault();
   });
 
-  function showHero() {
-    var bits = hero.querySelectorAll('h1, .subtitle');
-    bits.forEach(function (el) { el.style.transition = 'none'; });
+  function copyEls() {
+    return hero.querySelectorAll('.hero-content h1, .hero-content .subtitle');
+  }
+
+  function resetCopy() {
+    copyEls().forEach(function (el) {
+      el.style.transition = 'none';
+      el.style.transform = '';
+      el.style.animation = '';
+    });
+    hero.style.zIndex = '';
     hero.classList.remove('bridge-lift');
+    requestAnimationFrame(function () {
+      copyEls().forEach(function (el) { el.style.transition = ''; });
+    });
+  }
+
+  function showHero() {
+    resetCopy();
     document.body.classList.remove('bridging');
     root.classList.remove('entered', 'opening');
     root.classList.add('locked');
     sitio.scrollTop = 0;
-    requestAnimationFrame(function () {
-      bits.forEach(function (el) { el.style.transition = ''; });
-    });
     var video = hero.querySelector('video');
     if (video && video.getAttribute('src')) video.play().catch(function () {});
   }
@@ -62,7 +74,15 @@
 
     document.body.classList.add('bridging');
     root.classList.add('opening');
+    hero.style.zIndex = '130';
     sitio.scrollTop = 0;
+
+    copyEls().forEach(function (el) {
+      el.style.animation = 'none';
+      el.style.transition = 'none';
+      el.style.transform = 'translateY(0px)';
+    });
+    void hero.offsetWidth;
 
     [title, hint, view].forEach(function (el) {
       if (el) el.classList.add('assembling');
@@ -81,7 +101,10 @@
 
     var move = '1.7s cubic-bezier(.77,0,.18,1)';
     requestAnimationFrame(function () {
-      hero.classList.add('bridge-lift');
+      copyEls().forEach(function (el) {
+        el.style.transition = 'transform 1.7s cubic-bezier(.77,0,.18,1)';
+        el.style.transform = 'translateY(-120vh)';
+      });
       requestAnimationFrame(function () {
         ghost.style.transition = 'left ' + move + ', top ' + move + ', width ' + move + ', height ' + move + ', border-radius 1.5s cubic-bezier(.77,0,.18,1), background 1.1s ease, color .9s ease, font-size 1.4s cubic-bezier(.77,0,.18,1), padding 1.2s ease, box-shadow .8s ease, opacity .55s ease, letter-spacing 1.2s ease';
         ghost.style.left = to.left + 'px';
@@ -120,7 +143,7 @@
 
     setTimeout(function () {
       document.body.classList.remove('bridging');
-      hero.classList.remove('bridge-lift');
+      resetCopy();
       btn.style.visibility = '';
       if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
       [title, hint, view].forEach(function (el) {
