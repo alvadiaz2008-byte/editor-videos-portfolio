@@ -84,9 +84,12 @@
     });
     void hero.offsetWidth;
 
-    [title, hint].forEach(function (el) {
-      if (el) el.classList.add('assembling');
-    });
+    if (hint) hint.classList.add('assembling');
+    if (title) {
+      title.classList.add('assembling');
+      title.style.transition = 'none';
+      title.style.opacity = '0';
+    }
 
     var to = title.getBoundingClientRect();
     var ghost = btn.cloneNode(true);
@@ -96,6 +99,7 @@
     ghost.style.top = from.top + 'px';
     ghost.style.width = from.width + 'px';
     ghost.style.height = from.height + 'px';
+    ghost.style.opacity = '1';
     document.body.appendChild(ghost);
     btn.style.visibility = 'hidden';
 
@@ -125,13 +129,16 @@
     });
 
     setTimeout(function () {
-      [title, hint].forEach(function (el) {
-        if (!el) return;
-        el.classList.remove('assembling');
-        el.classList.add('assemble');
-      });
-      ghost.style.transition = 'opacity .45s ease';
-      ghost.style.opacity = '0';
+      if (title) {
+        title.classList.remove('assembling', 'assemble');
+        title.style.transition = 'none';
+        title.style.opacity = '1';
+      }
+      if (hint) {
+        hint.classList.remove('assembling');
+        hint.classList.add('assemble');
+      }
+      if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
       root.classList.add('entered');
       root.classList.remove('locked');
       window.dispatchEvent(new Event('projects-enter'));
@@ -149,9 +156,8 @@
       resetCopy();
       btn.style.visibility = '';
       if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
-      [title, hint].forEach(function (el) {
-        if (el) el.classList.remove('assembling', 'assemble');
-      });
+      if (hint) hint.classList.remove('assembling', 'assemble');
+      if (title) title.classList.remove('assembling', 'assemble');
     }, 2300);
   }
 
