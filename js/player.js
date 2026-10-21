@@ -13,15 +13,18 @@
     'html.lightbox-open #sitio{overflow:hidden}',
     '.glass-field{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}',
     '.glass-bit{position:absolute;display:block;border-radius:28px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}',
-    '.g1{width:min(220px,20vw);height:min(460px,52vh);left:6%;top:20%;animation:glassInL 1.7s cubic-bezier(.77,0,.18,1) both}',
-    '.g2{width:min(320px,28vw);height:min(160px,18vh);right:7%;top:14%;animation:glassInTR 1.7s cubic-bezier(.77,0,.18,1) .08s both}',
-    '.g3{width:min(200px,18vw);height:min(260px,30vh);right:8%;bottom:12%;animation:glassInR 1.7s cubic-bezier(.77,0,.18,1) .16s both}',
-    '.g4{width:min(280px,26vw);height:min(130px,15vh);left:7%;bottom:12%;border-radius:24px;animation:glassInB 1.7s cubic-bezier(.77,0,.18,1) .12s both}',
+    '.g1{width:min(190px,17vw);height:min(400px,46vh);left:5%;top:24%;animation:glassInL 1.7s cubic-bezier(.77,0,.18,1) both}',
+    '.g2{width:min(280px,24vw);height:min(140px,16vh);right:6%;top:11%;animation:glassInTR 1.7s cubic-bezier(.77,0,.18,1) .08s both}',
+    '.g3{width:min(170px,15vw);height:min(230px,26vh);right:6%;bottom:13%;animation:glassInR 1.7s cubic-bezier(.77,0,.18,1) .16s both}',
+    '.g4{width:min(250px,22vw);height:min(120px,14vh);left:5%;bottom:13%;border-radius:24px;animation:glassInB 1.7s cubic-bezier(.77,0,.18,1) .12s both}',
+    '.g5{width:min(148px,13vw);height:min(148px,13vw);left:27%;top:10%;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.32),rgba(255,255,255,.06) 42%,rgba(255,255,255,.03) 70%);animation:glassInT 1.7s cubic-bezier(.77,0,.18,1) .1s both}',
+    '.g6{width:min(168px,15vw);height:min(168px,15vw);right:26%;top:40%;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.32),rgba(255,255,255,.06) 42%,rgba(255,255,255,.03) 70%);animation:glassInR 1.7s cubic-bezier(.77,0,.18,1) .2s both}',
     '@keyframes glassInL{from{transform:translate3d(-110%,0,0)}to{transform:none}}',
     '@keyframes glassInTR{from{transform:translate3d(70vw,-60vh,0)}to{transform:none}}',
     '@keyframes glassInR{from{transform:translate3d(80vw,0,0)}to{transform:none}}',
     '@keyframes glassInB{from{transform:translate3d(0,70vh,0)}to{transform:none}}',
-    '@media (max-width:768px){.g1{width:34vw;height:18vh;left:4%;top:11%}.g2{width:36vw;height:12vh;right:4%;top:12%}.g3{width:30vw;height:16vh;right:5%;bottom:9%}.g4{width:34vw;height:11vh;left:4%;bottom:9%}}',
+    '@keyframes glassInT{from{transform:translate3d(0,-80vh,0)}to{transform:none}}',
+    '@media (max-width:768px){.g1{width:28vw;height:16vh;left:4%;top:12%}.g2{width:32vw;height:11vh;right:4%;top:11%}.g3{width:24vw;height:14vh;right:4%;bottom:10%}.g4{width:30vw;height:10vh;left:4%;bottom:10%}.g5{width:16vw;height:16vw;left:30%;top:9%}.g6{width:15vw;height:15vw;right:22%;top:46%}}',
     '@media (prefers-reduced-motion:reduce){.glass-bit{animation:none}}'
   ].join('');
   document.head.appendChild(style);
