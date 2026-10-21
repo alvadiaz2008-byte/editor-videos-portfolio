@@ -86,6 +86,7 @@
     var media = e.target.closest ? e.target.closest('#proyectos .slide-media') : null;
     if (!media) return;
     var vid = media.querySelector('video');
+    var src = vid && (vid.currentSrc || vid.getAttribute('src'));
     if (!src) return;
     e.preventDefault();
     e.stopPropagation();
