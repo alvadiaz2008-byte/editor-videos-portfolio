@@ -12,19 +12,17 @@
     'html.lightbox-open,html.lightbox-open body{overflow:hidden}',
     'html.lightbox-open #sitio{overflow:hidden}',
     '.glass-field{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}',
-    '.glass-bit{position:absolute;display:block;border-radius:32px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}',
-    '.g1{width:min(210px,16vw);height:96vh;left:-2vw;top:2vh;animation:glassInL 1.7s cubic-bezier(.77,0,.18,1) both}',
-    '.g2{width:min(190px,14vw);height:min(190px,14vw);left:29%;bottom:1%;border-radius:20px;animation:glassInD 1.7s cubic-bezier(.77,0,.18,1) .1s both}',
-    '.g3,.g4{width:min(168px,13vw);height:125vh;top:42%;}',
-    '.g3{left:70%;margin-left:-6.5vw;margin-top:-62vh;animation:glassInX1 1.7s cubic-bezier(.77,0,.18,1) .06s both}',
-    '.g4{left:78%;margin-left:-6.5vw;margin-top:-62vh;animation:glassInX2 1.7s cubic-bezier(.77,0,.18,1) .14s both}',
+    '.glass-bit{position:absolute;inset:0;width:auto;height:auto;border:0;border-radius:0;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.045) 42%,rgba(255,255,255,.08));box-shadow:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}',
+    '.g1{clip-path:polygon(0.8% 1.5%,79.3% 0.7%,25.3% 70.3%);animation:glassInT 1.7s cubic-bezier(.77,0,.18,1) both}',
+    '.g2{clip-path:polygon(88.8% 0.7%,99.2% 2.2%,98% 99.4%,65.2% 33.6%);animation:glassInR 1.7s cubic-bezier(.77,0,.18,1) .08s both}',
+    '.g3{clip-path:polygon(38.1% 99.7%,29.9% 80.8%,59.1% 41.4%,79.8% 87.9%,70.6% 99.7%);animation:glassInB 1.7s cubic-bezier(.77,0,.18,1) .12s both}',
+    '.g4{clip-path:polygon(0.6% 53.8%,7.2% 46.4%,28% 99%,0.9% 98.7%);animation:glassInL 1.7s cubic-bezier(.77,0,.18,1) .16s both}',
     '.g5,.g6{display:none}',
-    '@keyframes glassInL{from{transform:translate3d(-80vw,0,0) rotate(-18deg)}to{transform:rotate(-18deg)}}',
-    '@keyframes glassInD{from{transform:translate3d(0,80vh,0) rotate(45deg)}to{transform:rotate(45deg)}}',
-    '@keyframes glassInX1{from{transform:translate3d(70vw,-20vh,0) rotate(-32deg)}to{transform:rotate(-32deg)}}',
-    '@keyframes glassInX2{from{transform:translate3d(80vw,24vh,0) rotate(28deg)}to{transform:rotate(28deg)}}',
-    '@media (max-width:768px){.g1{width:20vw;height:70vh;left:-6vw;top:16vh}.g2{width:26vw;height:26vw;left:10%;bottom:4%}.g3{left:62%}.g4{left:74%}.g3,.g4{width:16vw;height:90vh}}',
-    '@media (prefers-reduced-motion:reduce){.g1{animation:none;transform:rotate(-18deg)}.g2{animation:none;transform:rotate(45deg)}.g3{animation:none;transform:rotate(-32deg)}.g4{animation:none;transform:rotate(28deg)}}'
+    '@keyframes glassInT{from{transform:translate3d(0,-110%,0)}to{transform:none}}',
+    '@keyframes glassInR{from{transform:translate3d(110%,0,0)}to{transform:none}}',
+    '@keyframes glassInB{from{transform:translate3d(0,110%,0)}to{transform:none}}',
+    '@keyframes glassInL{from{transform:translate3d(-110%,0,0)}to{transform:none}}',
+    '@media (prefers-reduced-motion:reduce){.glass-bit{animation:none}}'
   ].join('');
   document.head.appendChild(style);
 
