@@ -90,29 +90,6 @@ function findThumbnail(num) {
   });
 }
 
-function loadHero() {
-  const el = document.querySelector('.hero-bg[data-video]');
-  if (!el) return;
-  const num = String(el.dataset.video).padStart(2, '0');
-  const videoEl = el.querySelector('.hero-video');
-  if (!videoEl) return;
-  videoEl.preload = 'metadata';
-  videoEl.muted = true;
-  videoEl.playsInline = true;
-  videoEl.loop = true;
-  findVideo(num).then((src) => {
-    if (!src) return;
-    videoEl.src = src;
-    videoEl.hidden = false;
-    el.classList.add('has-video');
-    const numberEl = el.querySelector('.slot-number');
-    if (numberEl) numberEl.style.display = 'none';
-    observeVideoVisibility(videoEl, el.closest('.hero') || el);
-  });
-}
-
-loadHero();
-
 function loadBeforeAfter() {
   const beforeEl = document.getElementById('beforeImg');
   const afterEl = document.getElementById('afterImg');
