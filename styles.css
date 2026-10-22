@@ -4,7 +4,7 @@ html{scroll-behavior:smooth}
 html.locked,html.locked body{overflow:hidden;height:100%;overscroll-behavior:none}
 body{font-family:Inter,system-ui,sans-serif;background:#000;color:var(--text);line-height:1.6;overflow-x:hidden}
 body.bridging{overflow:hidden}
-.header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.2rem;background:rgba(0,0,0,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.2rem;background:#000;border-bottom:1px solid var(--border)}
 html.opening:not(.move-in):not(.entered) .header{transform:translateY(-120%);transition:none}
 html.move-in .header,html.entered .header{z-index:145;transform:translateY(0);transition:transform var(--move)}
 .logo{font-weight:600;font-size:1.15rem;letter-spacing:1px;color:var(--text);text-decoration:none;transition:opacity .35s var(--ease)}
@@ -24,11 +24,6 @@ html.entered .hero{opacity:0;visibility:hidden;pointer-events:none;transition:op
 html.opening .site-panel{visibility:visible;opacity:1}
 html.opening:not(.entered) .site-panel{pointer-events:none}
 html.entered .site-panel{visibility:visible;opacity:1;overflow:auto;pointer-events:auto}
-.hero-bg{position:absolute;inset:0;background:#0a0a0a;display:flex;align-items:center;justify-content:center;transition:transform var(--move),opacity var(--move)}
-body.bridging .hero-bg{transform:scale(1.16);opacity:0}
-.hero-bg .slot-number{font-size:4rem;opacity:.22}
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,.72) 50%,rgba(0,0,0,.92));z-index:2}
 .hero-content{position:relative;z-index:3;max-width:720px;padding:0 1.5rem}
 .hero-content h1{font-size:clamp(1.85rem,4vw,2.85rem);font-weight:600;line-height:1.15;margin-bottom:.85rem}
 .subtitle{color:var(--muted);font-size:1rem;margin:0 auto 1.35rem;max-width:480px}
@@ -43,7 +38,6 @@ body.bridging .hero-ctas .btn-outline{animation:none;transition:transform var(--
 .btn-outline:hover{border-color:var(--muted);transform:translateY(-2px)}
 .bridge-ghost{position:fixed;z-index:160;margin:0;pointer-events:none;white-space:nowrap;overflow:hidden;box-sizing:border-box}
 .slot-number{font-size:2.5rem;font-weight:300;color:var(--muted);opacity:.45}
-.hero-bg.has-video .slot-number{display:none}
 .wide{width:min(1580px,100%);margin:0 auto;padding:0 3vw}
 .before-after,.about{padding:6.5rem 0}
 .before-after h2,.about h2,.contact h2,.projects-head h2{font-size:clamp(1.7rem,3vw,2.3rem);font-weight:600;margin-bottom:1rem}
