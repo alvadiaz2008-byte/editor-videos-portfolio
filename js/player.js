@@ -11,7 +11,7 @@
     '.video-lightbox-close:hover{background:rgba(255,255,255,.22)}',
     'html.lightbox-open,html.lightbox-open body{overflow:hidden}',
     'html.lightbox-open #sitio{overflow:hidden}',
-    '.glass-field{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}',
+    '.glass-field{position:absolute;left:50%;top:50%;z-index:1;width:max(100%,calc(100dvh * 1.79));height:max(100%,calc(100vw / 1.79));transform:translate(-50%,-50%);pointer-events:none}',
     '.glass-bit{position:absolute;inset:0;width:auto;height:auto;border:0;border-radius:0;background:#1a1a1e;box-shadow:none}',
     '.g1{clip-path:polygon(3.7% 9.6%,2.9% 6.7%,2.7% 4.4%,3.2% 2.8%,4.4% 1.8%,6.2% 1.4%,70% .8%,73% 1.2%,74.7% 2.3%,75.1% 4.2%,74.1% 6.9%,71.7% 10.4%,27.9% 67%,26.9% 68%,26% 68.3%,25.1% 68%,24.3% 67.1%,23.6% 65.5%);animation:glassInT 1.7s cubic-bezier(.77,0,.18,1) both}',
     '.g2{clip-path:polygon(87.9% 2%,88.3% 1.5%,88.7% 1.2%,89.1% 1%,89.5% .9%,90% .9%,96.4% 1.8%,97.4% 2.1%,98.2% 2.9%,98.7% 3.9%,99% 5.4%,99.1% 7.2%,98.2% 85.8%,97.9% 90.3%,97.2% 92.9%,96.2% 93.6%,94.8% 92.3%,92.9% 89.2%,67.3% 37.8%,66.7% 36.2%,66.4% 34.6%,66.4% 33%,66.9% 31.5%,67.7% 30.1%);animation:glassInR 1.7s cubic-bezier(.77,0,.18,1) .08s both}',
