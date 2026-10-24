@@ -40,6 +40,7 @@ body.bridging .hero-ctas .btn-outline{animation:none;transition:transform var(--
 .slot-number{font-size:2.5rem;font-weight:300;color:var(--muted);opacity:.45}
 .wide{width:min(1580px,100%);margin:0 auto;padding:0 3vw}
 .before-after,.about{padding:6.5rem 0}
+#antes-despues,.nav a[href="#antes-despues"]{display:none}
 .before-after h2,.about h2,.contact h2,.projects-head h2{font-size:clamp(1.7rem,3vw,2.3rem);font-weight:600;margin-bottom:1rem}
 .section-desc{color:var(--muted);margin-bottom:2rem;max-width:560px}
 .ba-slider{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:18px;border:1px solid var(--border);user-select:none;background:#0a0a0a;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
