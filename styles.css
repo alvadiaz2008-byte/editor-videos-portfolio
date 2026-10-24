@@ -112,13 +112,16 @@ html.move-in .projects-viewport,html.entered .projects-viewport{transform:none;t
   .header{padding:.75rem 1rem}
   .about-grid{grid-template-columns:1fr;gap:2rem}
   .projects-sticky{padding-top:3.4rem}
-  .projects-head{padding:0 3vw .25rem;flex-direction:column;align-items:flex-start;gap:0}
+  .projects-head{padding:0 5vw .2rem;flex-direction:column;align-items:flex-start;gap:0}
   .projects-head h2{font-size:1.25rem;margin:0}
   .projects-hint{font-size:.75rem}
-  .slide-media{width:min(30vw,calc(42vh * 9 / 16));height:min(42vh,calc(30vw * 16 / 9));border-radius:12px}
-  .slide-copy{left:calc(50% + 16vw);width:30vw;max-height:48vh}
-  .proj-num{font-size:1.7rem;margin-bottom:0}
-  .proj-desc-box{margin-top:-.38rem;padding:.65rem .7rem;max-height:28vh;border-radius:12px}
-  .proj-desc-box h3{font-size:.85rem}
-  .proj-desc-box p{font-size:.68rem;line-height:1.4}
+}
+@media (max-width:768px),(max-height:520px){
+  .project-slide{flex-direction:column;align-items:center;justify-content:center;gap:.2rem;padding:0 5vw 2.5vh}
+  .slide-media{width:min(56vw,calc(34dvh * 9 / 16));height:min(34dvh,calc(56vw * 16 / 9));border-radius:14px}
+  .slide-copy{position:relative;left:auto;top:auto;transform:none;width:min(92vw,440px);max-height:none}
+  .proj-num{font-size:clamp(2.15rem,10vw,3rem)}
+  .proj-desc-box{margin-top:calc(-.26 * clamp(2.15rem,10vw,3rem));padding:.75rem .9rem .85rem;max-height:none;border-radius:14px}
+  .proj-desc-box h3{font-size:.98rem}
+  .proj-desc-box p{font-size:.8rem;line-height:1.45;max-height:min(16dvh,120px);overflow:auto}
 }
