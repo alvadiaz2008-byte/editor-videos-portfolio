@@ -8,7 +8,7 @@ body.bridging{overflow:hidden}
 html.opening:not(.move-in):not(.entered) .header{transform:translateY(-120%);transition:none}
 html.move-in .header,html.entered .header{z-index:145;transform:translateY(0);transition:transform var(--move)}
 .logo{display:inline-flex;align-items:center;line-height:0;text-decoration:none;transition:opacity .35s var(--ease)}
-.logo img{height:74px;width:auto;display:block}
+.logo img{height:52px;width:auto;display:block}
 .logo:hover{opacity:.85}
 .nav{display:flex;gap:1.75rem}
 .nav a{color:var(--muted);text-decoration:none;font-size:.9rem;position:relative;transition:color .35s var(--ease)}
@@ -111,7 +111,7 @@ html.move-in .projects-viewport,html.entered .projects-viewport{transform:none;t
   .menu-toggle{display:block}
   .btn-whatsapp{display:none}
   .header{padding:.75rem 1rem}
-  .logo img{height:52px}
+  .logo img{height:40px}
   .about-grid{grid-template-columns:1fr;gap:2rem}
   .projects-sticky{padding-top:3.4rem}
   .projects-head{padding:0 5vw .2rem;flex-direction:column;align-items:flex-start;gap:0}
