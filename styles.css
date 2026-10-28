@@ -7,8 +7,9 @@ body.bridging{overflow:hidden}
 .header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.2rem;background:#000;border-bottom:1px solid var(--border)}
 html.opening:not(.move-in):not(.entered) .header{transform:translateY(-120%);transition:none}
 html.move-in .header,html.entered .header{z-index:145;transform:translateY(0);transition:transform var(--move)}
-.logo{font-weight:600;font-size:1.15rem;letter-spacing:1px;color:var(--text);text-decoration:none;transition:opacity .35s var(--ease)}
-.logo:hover{opacity:.7}
+.logo{display:inline-flex;align-items:center;line-height:0;text-decoration:none;transition:opacity .35s var(--ease)}
+.logo img{height:74px;width:auto;display:block}
+.logo:hover{opacity:.85}
 .nav{display:flex;gap:1.75rem}
 .nav a{color:var(--muted);text-decoration:none;font-size:.9rem;position:relative;transition:color .35s var(--ease)}
 .nav a::after{content:'';position:absolute;left:0;bottom:-4px;width:100%;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
@@ -110,6 +111,7 @@ html.move-in .projects-viewport,html.entered .projects-viewport{transform:none;t
   .menu-toggle{display:block}
   .btn-whatsapp{display:none}
   .header{padding:.75rem 1rem}
+  .logo img{height:52px}
   .about-grid{grid-template-columns:1fr;gap:2rem}
   .projects-sticky{padding-top:3.4rem}
   .projects-head{padding:0 5vw .2rem;flex-direction:column;align-items:flex-start;gap:0}
