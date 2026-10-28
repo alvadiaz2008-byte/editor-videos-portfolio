@@ -197,6 +197,11 @@ function bindProjectScroller(stage, track) {
       slide.style.transform = 'translate3d(' + (delta * shift) + '%, 0, 0) scale(' + scale + ')';
       slide.style.zIndex = String(20 - Math.round(ad * 8));
       slide.style.visibility = ad > 1.25 ? 'hidden' : 'visible';
+      slide.style.pointerEvents = 'none';
+      const media = slide.querySelector('.slide-media');
+      const copy = slide.querySelector('.slide-copy');
+      if (media) media.style.pointerEvents = 'auto';
+      if (copy) copy.style.pointerEvents = ad < 0.45 ? 'auto' : 'none';
       const vid = slide.querySelector('video');
       if (vid && vid.getAttribute('src')) {
         if (open && ad < 0.45) vid.play().catch(() => {});
@@ -266,6 +271,18 @@ function bindProjectScroller(stage, track) {
     const { pos } = metrics();
     snapTo(Math.round(pos) + (dx < 0 ? 1 : -1));
   }, { passive: true });
+
+  track.addEventListener('click', (e) => {
+    const media = e.target.closest ? e.target.closest('.slide-media') : null;
+    if (!media) return;
+    const slide = media.closest('.project-slide');
+    const index = slides().indexOf(slide);
+    if (index < 0) return;
+    if (index === Math.round(metrics().pos)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    snapTo(index);
+  });
 
   window.addEventListener('projects-enter', () => {
     update();
