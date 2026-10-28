@@ -12,7 +12,7 @@
     'html.lightbox-open,html.lightbox-open body{overflow:hidden}',
     'html.lightbox-open #sitio{overflow:hidden}',
     '.glass-field{position:absolute;left:50%;top:50%;z-index:1;width:max(100%,calc(100dvh * 1.79));height:max(100%,calc(100vw / 1.79));transform:translate(-50%,-50%);pointer-events:none}',
-    '.glass-bit{position:absolute;inset:0;width:auto;height:auto;border:0;border-radius:0;background:#1a1a1e;box-shadow:none}',
+    '.glass-bit{position:absolute;inset:0;width:auto;height:auto;border:0;border-radius:0;background:#1a1a1e;box-shadow:none;filter:drop-shadow(0 0 1px #d7bc73) drop-shadow(0 0 10px rgba(215,188,115,.72))}',
     '.g1{clip-path:polygon(3.7% 9.6%,2.9% 6.7%,2.7% 4.4%,3.2% 2.8%,4.4% 1.8%,6.2% 1.4%,70% .8%,73% 1.2%,74.7% 2.3%,75.1% 4.2%,74.1% 6.9%,71.7% 10.4%,27.9% 67%,26.9% 68%,26% 68.3%,25.1% 68%,24.3% 67.1%,23.6% 65.5%);animation:glassInT 1.7s cubic-bezier(.77,0,.18,1) both}',
     '.g2{clip-path:polygon(87.9% 2%,88.3% 1.5%,88.7% 1.2%,89.1% 1%,89.5% .9%,90% .9%,96.4% 1.8%,97.4% 2.1%,98.2% 2.9%,98.7% 3.9%,99% 5.4%,99.1% 7.2%,98.2% 85.8%,97.9% 90.3%,97.2% 92.9%,96.2% 93.6%,94.8% 92.3%,92.9% 89.2%,67.3% 37.8%,66.7% 36.2%,66.4% 34.6%,66.4% 33%,66.9% 31.5%,67.7% 30.1%);animation:glassInR 1.7s cubic-bezier(.77,0,.18,1) .08s both}',
     '.g3{clip-path:polygon(39.6% 99.7%,39% 99.6%,38.5% 99.4%,38% 99%,37.6% 98.4%,37.2% 97.6%,31.7% 85.1%,31.2% 83.4%,31% 81.8%,31.1% 80.3%,31.5% 78.9%,32.3% 77.6%,56.8% 44.6%,57.7% 43.6%,58.5% 43.2%,59.4% 43.4%,60.2% 44.1%,60.9% 45.5%,77.9% 83.5%,78.5% 85.2%,78.7% 86.8%,78.6% 88.4%,78.1% 89.8%,77.3% 91.2%,71.4% 98.7%,71.1% 99.1%,70.7% 99.3%,70.4% 99.5%,70% 99.7%,69.6% 99.7%);animation:glassInB 1.7s cubic-bezier(.77,0,.18,1) .12s both}',
