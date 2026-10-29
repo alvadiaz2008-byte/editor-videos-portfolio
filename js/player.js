@@ -1,42 +1,18 @@
 (function () {
   var style = document.createElement('style');
   style.textContent = [
-    '#proyectos .slide-media{cursor:pointer}',
-    '.video-lightbox{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:4vh 4vw;background:rgba(0,0,0,.9)}',
+    '.video-lightbox{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:4vh 4vw;background:rgba(8,7,6,.94)}',
     '.video-lightbox[hidden]{display:none}',
-    '.video-lightbox-frame{position:relative;height:min(92vh,92dvh);width:auto;max-width:92vw;aspect-ratio:9/16;border-radius:16px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.28)}',
+    '.video-lightbox-frame{position:relative;height:min(92svh,920px);width:auto;max-width:92vw;aspect-ratio:9/16;background:#000;border:1px solid rgba(215,188,115,.45)}',
     '.video-lightbox-player{width:100%;height:100%;object-fit:contain;background:#000;display:block}',
-    '.video-lightbox-frame::after{content:"";position:absolute;inset:0;z-index:2;border-radius:inherit;padding:1px;background:linear-gradient(155deg,rgba(255,255,255,.75),rgba(255,255,255,.1) 36%,rgba(255,255,255,.04) 64%,rgba(255,255,255,.4));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}',
-    '.video-lightbox-close{position:absolute;top:1rem;right:1rem;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:1.7rem;line-height:1;cursor:pointer}',
-    '.video-lightbox-close:hover{background:rgba(255,255,255,.22)}',
-    'html.lightbox-open,html.lightbox-open body{overflow:hidden}',
-    'html.lightbox-open #sitio{overflow:hidden}',
-    '.glass-field{position:absolute;left:50%;top:50%;z-index:1;width:max(100%,calc(100dvh * 1.79));height:max(100%,calc(100vw / 1.79));transform:translate(-50%,-50%);pointer-events:none}',
-    '.glass-bit{position:absolute;inset:0;width:auto;height:auto;border:0;border-radius:0;background:#1a1a1e;box-shadow:none;filter:drop-shadow(0 0 1px #d7bc73) drop-shadow(0 0 10px rgba(215,188,115,.72))}',
-    '.g1{clip-path:polygon(3.7% 9.6%,2.9% 6.7%,2.7% 4.4%,3.2% 2.8%,4.4% 1.8%,6.2% 1.4%,70% .8%,73% 1.2%,74.7% 2.3%,75.1% 4.2%,74.1% 6.9%,71.7% 10.4%,27.9% 67%,26.9% 68%,26% 68.3%,25.1% 68%,24.3% 67.1%,23.6% 65.5%);animation:glassInT 1.7s cubic-bezier(.77,0,.18,1) both}',
-    '.g2{clip-path:polygon(87.9% 2%,88.3% 1.5%,88.7% 1.2%,89.1% 1%,89.5% .9%,90% .9%,96.4% 1.8%,97.4% 2.1%,98.2% 2.9%,98.7% 3.9%,99% 5.4%,99.1% 7.2%,98.2% 85.8%,97.9% 90.3%,97.2% 92.9%,96.2% 93.6%,94.8% 92.3%,92.9% 89.2%,67.3% 37.8%,66.7% 36.2%,66.4% 34.6%,66.4% 33%,66.9% 31.5%,67.7% 30.1%);animation:glassInR 1.7s cubic-bezier(.77,0,.18,1) .08s both}',
-    '.g3{clip-path:polygon(39.6% 99.7%,39% 99.6%,38.5% 99.4%,38% 99%,37.6% 98.4%,37.2% 97.6%,31.7% 85.1%,31.2% 83.4%,31% 81.8%,31.1% 80.3%,31.5% 78.9%,32.3% 77.6%,56.8% 44.6%,57.7% 43.6%,58.5% 43.2%,59.4% 43.4%,60.2% 44.1%,60.9% 45.5%,77.9% 83.5%,78.5% 85.2%,78.7% 86.8%,78.6% 88.4%,78.1% 89.8%,77.3% 91.2%,71.4% 98.7%,71.1% 99.1%,70.7% 99.3%,70.4% 99.5%,70% 99.7%,69.6% 99.7%);animation:glassInB 1.7s cubic-bezier(.77,0,.18,1) .12s both}',
-    '.g4{clip-path:polygon(.6% 56.8%,.7% 55.6%,.8% 54.6%,1.1% 53.7%,1.5% 52.9%,2% 52.2%,4.8% 49.1%,5.7% 48.3%,6.6% 48%,7.4% 48.3%,8.2% 49.2%,8.8% 50.5%,24.7% 90.5%,25.6% 93.6%,25.9% 95.9%,25.4% 97.6%,24.1% 98.6%,22.2% 98.9%,3.8% 98.7%,2.8% 98.5%,2% 97.9%,1.4% 96.8%,1% 95.3%,.9% 93.5%);animation:glassInL 1.7s cubic-bezier(.77,0,.18,1) .16s both}',
-    'html.opening .g1{animation:glassOutT 1.7s cubic-bezier(.77,0,.18,1) both}',
-    'html.opening .g2{animation:glassOutR 1.7s cubic-bezier(.77,0,.18,1) .08s both}',
-    'html.opening .g3{animation:glassOutB 1.7s cubic-bezier(.77,0,.18,1) .12s both}',
-    'html.opening .g4{animation:glassOutL 1.7s cubic-bezier(.77,0,.18,1) .16s both}',
-    '@keyframes glassInT{from{transform:translate3d(0,-110%,0)}to{transform:none}}',
-    '@keyframes glassInR{from{transform:translate3d(110%,0,0)}to{transform:none}}',
-    '@keyframes glassInB{from{transform:translate3d(0,110%,0)}to{transform:none}}',
-    '@keyframes glassInL{from{transform:translate3d(-110%,0,0)}to{transform:none}}',
-    '@keyframes glassOutT{from{transform:none}to{transform:translate3d(0,-110%,0)}}',
-    '@keyframes glassOutR{from{transform:none}to{transform:translate3d(110%,0,0)}}',
-    '@keyframes glassOutB{from{transform:none}to{transform:translate3d(0,110%,0)}}',
-    '@keyframes glassOutL{from{transform:none}to{transform:translate3d(-110%,0,0)}}',
-    '@media (prefers-reduced-motion:reduce){.glass-bit,html.opening .glass-bit{animation:none}}'
+    '.video-lightbox-close{position:absolute;top:1rem;right:1rem;z-index:2;width:44px;height:44px;border:0;background:var(--gold,#d7bc73);color:#1a150c;font-size:1.6rem;line-height:1;cursor:pointer}'
   ].join('');
   document.head.appendChild(style);
 
   var overlay = document.createElement('div');
   overlay.className = 'video-lightbox';
   overlay.hidden = true;
-  overlay.innerHTML = '<button type="button" class="video-lightbox-close" aria-label="Cerrar">\u00d7</button><div class="video-lightbox-frame"><video class="video-lightbox-player" controls playsinline autoplay loop></video></div>';
+  overlay.innerHTML = '<button type="button" class="video-lightbox-close" aria-label="Cerrar">\u00d7</button><div class="video-lightbox-frame"><video class="video-lightbox-player" controls playsinline></video></div>';
   document.body.appendChild(overlay);
 
   var player = overlay.querySelector('video');
@@ -48,14 +24,7 @@
     video.muted = !withSound;
     if (withSound) video.volume = 1;
     var pending = video.play();
-    if (pending && pending.catch) pending.catch(function () {
-      if (!withSound) return;
-      video.muted = true;
-      var retry = video.play();
-      if (retry && retry.then) {
-        retry.then(function () { video.muted = false; }).catch(function () {});
-      }
-    });
+    if (pending && pending.catch) pending.catch(function () {});
   }
 
   function closeLightbox() {
@@ -73,6 +42,7 @@
   }
 
   function openLightbox(src, fromVid) {
+    if (!src) return;
     sourceVid = fromVid || null;
     if (sourceVid) sourceVid.pause();
     player.loop = true;
@@ -83,39 +53,26 @@
     overlay.hidden = false;
     document.documentElement.classList.add('lightbox-open');
     playNow(player, true);
-    player.addEventListener('canplay', function once() {
-      if (!overlay.hidden) playNow(player, true);
-    }, { once: true });
   }
 
   document.addEventListener('click', function (e) {
     if (e.target.closest && e.target.closest('.video-lightbox-close')) return;
-    var media = e.target.closest ? e.target.closest('#proyectos .slide-media') : null;
+    var media = e.target.closest ? e.target.closest('.shot-media, .cut') : null;
     if (!media) return;
     var vid = media.querySelector('video');
-    var src = vid && (vid.currentSrc || vid.getAttribute('src'));
+    var src = media.getAttribute('data-src') || (vid && (vid.currentSrc || vid.getAttribute('src')));
     if (!src) return;
     e.preventDefault();
-    e.stopPropagation();
     openLightbox(src, vid);
   });
 
-  document.addEventListener('play', function (e) {
-    var node = e.target;
-    if (!document.documentElement.classList.contains('lightbox-open')) return;
-    if (node && node.classList && node.classList.contains('slide-vid')) node.pause();
-  }, true);
-
   closeBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    e.stopPropagation();
     closeLightbox();
   });
-
   overlay.addEventListener('click', function (e) {
     if (e.target === overlay) closeLightbox();
   });
-
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && !overlay.hidden) closeLightbox();
   });
