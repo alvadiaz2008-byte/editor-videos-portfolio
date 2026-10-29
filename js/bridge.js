@@ -121,9 +121,11 @@
       ghost.style.color = '#f3f1ec';
       ghost.style.boxShadow = 'none';
       ghost.style.padding = '0px';
-      ghost.style.fontSize = getComputedStyle(title).fontSize;
-      ghost.style.fontWeight = '600';
-      ghost.style.letterSpacing = '-0.3px';
+      var titleStyle = getComputedStyle(title);
+      ghost.style.fontSize = titleStyle.fontSize;
+      ghost.style.fontFamily = titleStyle.fontFamily;
+      ghost.style.fontWeight = titleStyle.fontWeight;
+      ghost.style.letterSpacing = titleStyle.letterSpacing;
       ghost.style.justifyContent = 'flex-start';
       ghost.style.textAlign = 'left';
     });
