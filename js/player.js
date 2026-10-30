@@ -58,7 +58,7 @@
     });
   }
 
-  function closeLightbox() {
+  function closeLightbox(fromPop) {
     var back = sourceVid;
     sourceVid = null;
     player.pause();
@@ -70,6 +70,7 @@
       back.muted = true;
       playNow(back, false);
     }
+    if (!fromPop && history.state && history.state.lightbox) history.back();
   }
 
   function openLightbox(src, fromVid) {
@@ -82,6 +83,15 @@
     try { player.currentTime = 0; } catch (err) {}
     overlay.hidden = false;
     document.documentElement.classList.add('lightbox-open');
+    var prev = history.state || { screen: 'site', section: 'proyectos', i: 0 };
+    if (!prev.lightbox) {
+      history.pushState({
+        screen: prev.screen || 'site',
+        section: prev.section || 'proyectos',
+        i: (prev.i || 0) + 1,
+        lightbox: true
+      }, '', location.href);
+    }
     playNow(player, true);
     player.addEventListener('canplay', function once() {
       if (!overlay.hidden) playNow(player, true);
@@ -109,14 +119,18 @@
   closeBtn.addEventListener('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
-    closeLightbox();
+    closeLightbox(false);
   });
 
   overlay.addEventListener('click', function (e) {
-    if (e.target === overlay) closeLightbox();
+    if (e.target === overlay) closeLightbox(false);
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && !overlay.hidden) closeLightbox();
+    if (e.key === 'Escape' && !overlay.hidden) closeLightbox(false);
+  });
+
+  window.addEventListener('popstate', function () {
+    if (!overlay.hidden) closeLightbox(true);
   });
 })();
