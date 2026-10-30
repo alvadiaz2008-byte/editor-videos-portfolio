@@ -37,22 +37,38 @@
     });
   }
 
+  function cleanUrl() {
+    return location.pathname + location.search;
+  }
+
+  function pushSite(id) {
+    id = id || 'proyectos';
+    var s = history.state || { i: 0 };
+    if (s.screen === 'site' && s.section === id && !s.lightbox) return;
+    history.pushState({ screen: 'site', section: id, i: (s.i || 0) + 1 }, '', cleanUrl() + '#' + id);
+  }
+
   function showHero() {
+    if (!root.classList.contains('entered') && !root.classList.contains('opening')) return;
     resetCopy();
     document.body.classList.remove('bridging');
     root.classList.remove('entered', 'opening', 'move-in');
     root.classList.add('locked');
     sitio.scrollTop = 0;
+    window.scrollTo(0, 0);
     var video = hero.querySelector('video');
     if (video && video.getAttribute('src')) video.play().catch(function () {});
   }
 
-  function openProjects(thenId) {
-    if (document.body.classList.contains('bridging')) return;
+  function openProjects(thenId, fromPop) {
+    thenId = thenId || 'proyectos';
+    if (document.body.classList.contains('bridging') && !fromPop) return;
+    if (!fromPop) pushSite(thenId);
+
     if (root.classList.contains('entered')) {
       if (thenId) {
         var el = document.getElementById(thenId);
-        if (el) sitio.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+        if (el) sitio.scrollTo({ top: el.offsetTop, behavior: fromPop ? 'auto' : 'smooth' });
       }
       return;
     }
@@ -169,11 +185,28 @@
     var href = link.getAttribute('href') || '';
     if (href === '#inicio') {
       e.preventDefault();
-      showHero();
+      var depth = (history.state && history.state.i) || 0;
+      if (depth > 0) history.go(-depth);
+      else showHero();
       return;
     }
     if (href.charAt(0) !== '#') return;
     e.preventDefault();
     openProjects(href.slice(1));
   });
+
+  window.addEventListener('popstate', function (e) {
+    var s = e.state || { screen: 'hero' };
+    if (s.lightbox) return;
+    if (s.screen === 'site') openProjects(s.section || 'proyectos', true);
+    else showHero();
+  });
+
+  var start = (location.hash || '').replace(/^#/, '');
+  if (start && start !== 'inicio') {
+    history.replaceState({ screen: 'site', section: start, i: 0 }, '', cleanUrl() + '#' + start);
+    openProjects(start, true);
+  } else {
+    history.replaceState({ screen: 'hero', i: 0 }, '', cleanUrl());
+  }
 })();
