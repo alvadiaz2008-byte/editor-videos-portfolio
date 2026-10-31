@@ -302,6 +302,36 @@ function bindProjectScroller(stage, track) {
   update();
 }
 
+
+const TRAITS = {
+  audio: ['Audio', '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 16.2V9.2l5.2-1.2v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="10" cy="16.2" r="1.5" fill="currentColor"/><circle cx="15.2" cy="14" r="1.5" fill="currentColor"/></svg>'],
+  texto: ['Texto', '<svg viewBox="0 0 24 24" aria-hidden="true"><text x="12" y="16" text-anchor="middle" fill="currentColor" font-family="Inter,sans-serif" font-size="11" font-weight="650">TI</text></svg>'],
+  stickers: ['Stickers', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.2a7.8 7.8 0 1 0 5.6 13.2 3.2 3.2 0 0 1-2.6-2.4A7.8 7.8 0 0 0 12 4.2z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'],
+  efectos: ['Efectos', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l1.6 5.4 5.5 1.4-5.5 1.5L12 16.8l-1.6-5.3-5.5-1.5 5.5-1.4L12 3.2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'],
+  transiciones: ['Transiciones', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l5.5 5.5-5.5 5.5M17.5 6.5L12 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
+  subtitulos: ['Subtítulos', '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.8" y="6" width="16.4" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 11h5.2M7 14.2h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'],
+  filtros: ['Filtros', '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="13.2" r="3.1" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="14.8" cy="11.6" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="13.2" cy="15.6" r="2.7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'],
+  ajuste: ['Ajuste', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 16h16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="9" cy="8" r="2.1" fill="#121214" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="16" r="2.1" fill="#121214" stroke="currentColor" stroke-width="1.6"/></svg>'],
+  plantillas: ['Plantillas', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.2V17.2A1.6 1.6 0 0 0 5.6 18.8h12.8A1.6 1.6 0 0 0 20 17.2v-6.2a1.6 1.6 0 0 0-1.6-1.6h-5.6L11.2 7H5.6A1.6 1.6 0 0 0 4 8.2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'],
+  avatar: ['Avatar de IA', '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.8" y="3.8" width="16.4" height="16.4" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="11" r="2.1" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.2 16.6c.7-1.5 2-2.2 3.8-2.2s3.1.7 3.8 2.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M17.2 6.1l.35.9.9.35-.9.35-.35.9-.35-.9-.9-.35.9-.35.35-.9z" fill="currentColor"/></svg>']
+};
+
+function traitsHtml(list) {
+  if (!Array.isArray(list) || !list.length) return '';
+  const seen = {};
+  const items = [];
+  list.forEach((name) => {
+    const key = String(name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    const alias = key === 'avatar de ia' ? 'avatar' : key;
+    if (!TRAITS[alias] || seen[alias]) return;
+    seen[alias] = true;
+    const pair = TRAITS[alias];
+    items.push('<span class="trait" title="' + pair[0] + '">' + pair[1] + '</span>');
+  });
+  if (!items.length) return '';
+  return '<div class="proj-traits">' + items.join('') + '</div>';
+}
+
 async function initProjects() {
   const stage = document.getElementById('proyectos');
   const track = document.getElementById('projectsTrack');
@@ -312,7 +342,8 @@ async function initProjects() {
     const r = await fetch('data/projects.json');
     if (r.ok) {
       const json = await r.json();
-      if (Array.isArray(json) && json.length) data = json;
+      const list = Array.isArray(json) ? json : (json && json.proyectos);
+      if (Array.isArray(list) && list.length) data = list;
     }
   } catch (_) {}
 
@@ -333,6 +364,7 @@ async function initProjects() {
             '<span class="category">' + escapeHtml(p.categoria) + '</span>' +
             '<h3>' + escapeHtml(p.titulo) + '</h3>' +
             '<p>' + escapeHtml(p.descripcion) + '</p>' +
+            traitsHtml(p.caracteristicas) +
           '</div>' +
         '</div>' +
       '</article>'

@@ -1,30 +1,37 @@
-[
-  {
-    "id": "01",
-    "categoria": "Shorts / Reels",
-    "titulo": "Reel Dinámico Marca X",
-    "descripcion": "Edición rápida, ritmo y texto impactante. Aquí puedes escribir todo el detalle del proyecto: cliente, objetivo, duración, herramientas usadas y resultados.",
-    "filtro": "shorts"
-  },
-  {
-    "id": "02",
-    "categoria": "Promocionales",
-    "titulo": "Maison D`emori",
-    "descripcion": "Video de presentacion de un nuevo proyecto, edicion centrada en llamar la atencion del publico y crear la sensacion de que algo increible está por llegar.",
-    "filtro": "promo"
-  },
-  {
-    "id": "03",
-    "categoria": "YouTube / Largo",
-    "titulo": "Documental Corto",
-    "descripcion": "Storytelling y postproducción completa. Describe la historia, el estilo visual y el mensaje final.",
-    "filtro": "youtube"
-  },
-  {
-    "id": "04",
-    "categoria": "Shorts / Reels",
-    "titulo": "Serie de Reels",
-    "descripcion": "Consistencia visual y engagement. Explica cuántos reels, el concepto de la serie y el rendimiento.",
-    "filtro": "shorts"
-  }
-]
+{
+  "instrucciones": "En cada proyecto, la lista caracteristicas decide los iconos del pie del cuadro. Escribe solo las que correspondan y borra el resto. Nombres exactos: audio, texto, stickers, efectos, transiciones, subtitulos, filtros, ajuste, plantillas, avatar.",
+  "proyectos": [
+    {
+      "id": "01",
+      "categoria": "Shorts / Reels",
+      "titulo": "Reel Dinámico Marca X",
+      "descripcion": "Edición rápida, ritmo y texto impactante. Aquí puedes escribir todo el detalle del proyecto: cliente, objetivo, duración, herramientas usadas y resultados.",
+      "filtro": "shorts",
+      "caracteristicas": ["audio", "texto", "efectos", "transiciones", "subtitulos"]
+    },
+    {
+      "id": "02",
+      "categoria": "Promocionales",
+      "titulo": "Maison D`emori",
+      "descripcion": "Video de presentacion de un nuevo proyecto, edicion centrada en llamar la atencion del publico y crear la sensacion de que algo increible está por llegar.",
+      "filtro": "promo",
+      "caracteristicas": ["audio", "texto", "stickers", "filtros", "ajuste"]
+    },
+    {
+      "id": "03",
+      "categoria": "YouTube / Largo",
+      "titulo": "Documental Corto",
+      "descripcion": "Storytelling y postproducción completa. Describe la historia, el estilo visual y el mensaje final.",
+      "filtro": "youtube",
+      "caracteristicas": ["audio", "subtitulos", "filtros", "ajuste", "transiciones"]
+    },
+    {
+      "id": "04",
+      "categoria": "Shorts / Reels",
+      "titulo": "Serie de Reels",
+      "descripcion": "Consistencia visual y engagement. Explica cuántos reels, el concepto de la serie y el rendimiento.",
+      "filtro": "shorts",
+      "caracteristicas": ["texto", "stickers", "efectos", "plantillas", "avatar"]
+    }
+  ]
+}

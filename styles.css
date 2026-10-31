@@ -91,6 +91,9 @@ html.move-in .projects-viewport,html.entered .projects-viewport{transform:none;t
 .proj-desc-box .category{display:block;font-size:.85rem;color:var(--accent);font-weight:500;margin-bottom:.35rem}
 .proj-desc-box h3{font-size:clamp(1.45rem,2vw,1.85rem);line-height:1;margin-bottom:.45rem;color:#f4f2ec}
 .proj-desc-box p{color:var(--muted);font-size:.9rem;line-height:1.55;white-space:pre-line}
+.proj-traits{display:flex;flex-wrap:wrap;gap:.35rem .55rem;margin-top:.85rem;color:#f4efe6}
+.trait{width:26px;height:26px;display:grid;place-items:center}
+.trait svg{width:22px;height:22px;display:block}
 .assembling{opacity:0 !important}
 .assemble{opacity:1;transition:opacity var(--move)}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
@@ -127,6 +130,8 @@ html.move-in .projects-viewport,html.entered .projects-viewport{transform:none;t
   .proj-desc-box{margin-top:calc(-.26 * clamp(2.15rem,10vw,3rem));padding:.75rem .9rem .85rem;max-height:none;border-radius:14px}
   .proj-desc-box h3{font-size:.98rem}
   .proj-desc-box p{font-size:.8rem;line-height:1.45;max-height:min(16dvh,120px);overflow:auto}
+  .trait{width:22px;height:22px}
+  .trait svg{width:18px;height:18px}
 }
 
 @media (hover:hover) and (pointer:fine){
