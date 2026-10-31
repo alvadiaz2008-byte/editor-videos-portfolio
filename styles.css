@@ -92,8 +92,8 @@ html.move-in .projects-viewport,html.entered .projects-viewport{transform:none;t
 .proj-desc-box h3{font-size:clamp(1.45rem,2vw,1.85rem);line-height:1;margin-bottom:.45rem;color:#f4f2ec}
 .proj-desc-box p{color:var(--muted);font-size:.9rem;line-height:1.55;white-space:pre-line}
 .proj-traits{display:flex;flex-wrap:wrap;gap:.35rem .55rem;margin-top:.85rem;color:#f4efe6}
-.trait{width:26px;height:26px;display:grid;place-items:center}
-.trait svg{width:22px;height:22px;display:block}
+.trait{width:28px;height:28px;display:grid;place-items:center}
+.trait svg{width:24px;height:24px;display:block}
 .assembling{opacity:0 !important}
 .assemble{opacity:1;transition:opacity var(--move)}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}

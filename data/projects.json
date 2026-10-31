@@ -1,5 +1,5 @@
 {
-  "instrucciones": "En cada proyecto, la lista caracteristicas decide los iconos del pie del cuadro. Escribe solo las que correspondan y borra el resto. Nombres exactos: audio, texto, stickers, efectos, transiciones, subtitulos, filtros, ajuste, plantillas, avatar.",
+  "instrucciones": "En cada proyecto, la lista caracteristicas decide los iconos del pie del cuadro. Escribe solo las que correspondan. Nombres exactos: audio, texto, subtitulos.",
   "proyectos": [
     {
       "id": "01",
@@ -7,7 +7,7 @@
       "titulo": "Reel Dinámico Marca X",
       "descripcion": "Edición rápida, ritmo y texto impactante. Aquí puedes escribir todo el detalle del proyecto: cliente, objetivo, duración, herramientas usadas y resultados.",
       "filtro": "shorts",
-      "caracteristicas": ["audio", "texto", "efectos", "transiciones", "subtitulos"]
+      "caracteristicas": ["audio", "texto", "subtitulos"]
     },
     {
       "id": "02",
@@ -15,7 +15,7 @@
       "titulo": "Maison D`emori",
       "descripcion": "Video de presentacion de un nuevo proyecto, edicion centrada en llamar la atencion del publico y crear la sensacion de que algo increible está por llegar.",
       "filtro": "promo",
-      "caracteristicas": ["audio", "texto", "stickers", "filtros", "ajuste"]
+      "caracteristicas": ["audio", "texto"]
     },
     {
       "id": "03",
@@ -23,7 +23,7 @@
       "titulo": "Documental Corto",
       "descripcion": "Storytelling y postproducción completa. Describe la historia, el estilo visual y el mensaje final.",
       "filtro": "youtube",
-      "caracteristicas": ["audio", "subtitulos", "filtros", "ajuste", "transiciones"]
+      "caracteristicas": ["audio", "subtitulos"]
     },
     {
       "id": "04",
@@ -31,7 +31,7 @@
       "titulo": "Serie de Reels",
       "descripcion": "Consistencia visual y engagement. Explica cuántos reels, el concepto de la serie y el rendimiento.",
       "filtro": "shorts",
-      "caracteristicas": ["texto", "stickers", "efectos", "plantillas", "avatar"]
+      "caracteristicas": ["texto", "subtitulos"]
     }
   ]
 }

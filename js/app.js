@@ -304,16 +304,9 @@ function bindProjectScroller(stage, track) {
 
 
 const TRAITS = {
-  audio: ['Audio', '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 16.2V9.2l5.2-1.2v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="10" cy="16.2" r="1.5" fill="currentColor"/><circle cx="15.2" cy="14" r="1.5" fill="currentColor"/></svg>'],
-  texto: ['Texto', '<svg viewBox="0 0 24 24" aria-hidden="true"><text x="12" y="16" text-anchor="middle" fill="currentColor" font-family="Inter,sans-serif" font-size="11" font-weight="650">TI</text></svg>'],
-  stickers: ['Stickers', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.2a7.8 7.8 0 1 0 5.6 13.2 3.2 3.2 0 0 1-2.6-2.4A7.8 7.8 0 0 0 12 4.2z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'],
-  efectos: ['Efectos', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l1.6 5.4 5.5 1.4-5.5 1.5L12 16.8l-1.6-5.3-5.5-1.5 5.5-1.4L12 3.2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'],
-  transiciones: ['Transiciones', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l5.5 5.5-5.5 5.5M17.5 6.5L12 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
-  subtitulos: ['Subtítulos', '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.8" y="6" width="16.4" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 11h5.2M7 14.2h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'],
-  filtros: ['Filtros', '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="13.2" r="3.1" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="14.8" cy="11.6" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="13.2" cy="15.6" r="2.7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'],
-  ajuste: ['Ajuste', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 16h16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="9" cy="8" r="2.1" fill="#121214" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="16" r="2.1" fill="#121214" stroke="currentColor" stroke-width="1.6"/></svg>'],
-  plantillas: ['Plantillas', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.2V17.2A1.6 1.6 0 0 0 5.6 18.8h12.8A1.6 1.6 0 0 0 20 17.2v-6.2a1.6 1.6 0 0 0-1.6-1.6h-5.6L11.2 7H5.6A1.6 1.6 0 0 0 4 8.2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'],
-  avatar: ['Avatar de IA', '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.8" y="3.8" width="16.4" height="16.4" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="11" r="2.1" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.2 16.6c.7-1.5 2-2.2 3.8-2.2s3.1.7 3.8 2.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M17.2 6.1l.35.9.9.35-.9.35-.35.9-.35-.9-.9-.35.9-.35.35-.9z" fill="currentColor"/></svg>']
+  audio: ['Audio', '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m18,7.5v9c0,.276-.224.5-.5.5s-.5-.224-.5-.5V7.5c0-.276.224-.5.5-.5s.5.224.5.5ZM13.5,0c-.276,0-.5.224-.5.5v23c0,.276.224.5.5.5s.5-.224.5-.5V.5c0-.276-.224-.5-.5-.5Zm8,4c-.276,0-.5.224-.5.5v15c0,.276.224.5.5.5s.5-.224.5-.5V4.5c0-.276-.224-.5-.5-.5Zm-12,0c-.276,0-.5.224-.5.5v15c0,.276.224.5.5.5s.5-.224.5-.5V4.5c0-.276-.224-.5-.5-.5Zm-4,3c-.276,0-.5.224-.5.5v9c0,.276.224.5.5.5s.5-.224.5-.5V7.5c0-.276-.224-.5-.5-.5Zm-4,2c-.276,0-.5.224-.5.5v5c0,.276.224.5.5.5s.5-.224.5-.5v-5c0-.276-.224-.5-.5-.5Z"/></svg>'],
+  texto: ['Texto', '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M24,14v1h-1v-1c0-.55-.45-1-1-1h-3v10h-1V13h-3c-.55,0-1,.45-1,1v1h-1v-1c0-1.1,.9-2,2-2h7c1.1,0,2,.9,2,2ZM16.5,2c.83,0,1.5,.67,1.5,1.5v1.5h1v-1.5c0-1.38-1.12-2.5-2.5-2.5H2.5C1.12,1,0,2.12,0,3.5v1.5H1v-1.5c0-.83,.67-1.5,1.5-1.5h6.5V23h1V2h6.5Z"/></svg>'],
+  subtitulos: ['Subtítulos', '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.5,1.987H4.5C2.019,1.987,0,4.006,0,6.487v11c0,2.481,2.019,4.5,4.5,4.5h15c2.481,0,4.5-2.019,4.5-4.5V6.487c0-2.481-2.019-4.5-4.5-4.5Zm3.5,15.5c0,1.93-1.57,3.5-3.5,3.5H4.5c-1.93,0-3.5-1.57-3.5-3.5V6.487c0-1.93,1.57-3.5,3.5-3.5h15c1.93,0,3.5,1.57,3.5,3.5v11Zm-3-4.987c0,.276-.224,.5-.5,.5H9.5c-.276,0-.5-.224-.5-.5s.224-.5,.5-.5h10c.276,0,.5,.224,.5,.5Zm0,4c0,.276-.224,.5-.5,.5h-2c-.276,0-.5-.224-.5-.5s.224-.5,.5-.5h2c.276,0,.5,.224,.5,.5ZM4,12.5c0-.276,.224-.5,.5-.5h2c.276,0,.5,.224,.5,.5s-.224,.5-.5,.5h-2c-.276,0-.5-.224-.5-.5Zm11,4c0,.276-.224,.5-.5,.5H4.5c-.276,0-.5-.224-.5-.5s.224-.5,.5-.5H14.5c.276,0,.5,.224,.5,.5Z"/></svg>']
 };
 
 function traitsHtml(list) {
@@ -322,7 +315,7 @@ function traitsHtml(list) {
   const items = [];
   list.forEach((name) => {
     const key = String(name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-    const alias = key === 'avatar de ia' ? 'avatar' : key;
+    const alias = key;
     if (!TRAITS[alias] || seen[alias]) return;
     seen[alias] = true;
     const pair = TRAITS[alias];
