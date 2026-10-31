@@ -352,8 +352,8 @@ async function initProjects() {
           '<video class="slide-vid" muted playsinline loop preload="auto"></video>' +
         '</div></div>' +
         '<div class="slide-copy">' +
+          '<span class="proj-num">' + id + '</span>' +
           '<div class="proj-desc-box">' +
-            '<span class="proj-num">' + id + '</span>' +
             '<span class="category">' + escapeHtml(p.categoria) + '</span>' +
             '<h3>' + escapeHtml(p.titulo) + '</h3>' +
             '<p>' + escapeHtml(p.descripcion) + '</p>' +
