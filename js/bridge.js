@@ -37,6 +37,12 @@
     });
   }
 
+  var heroBg = hero.querySelector('.hero-bg');
+  if (heroBg && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroBg.removeAttribute('autoplay');
+    heroBg.pause();
+  }
+
   function cleanUrl() {
     return location.pathname + location.search;
   }
