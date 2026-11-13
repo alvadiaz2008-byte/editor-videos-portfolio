@@ -1,13 +1,43 @@
-// Mobile menu
-const menuToggle = document.getElementById('menuToggle');
 const nav = document.getElementById('nav');
+const sitePanel = document.getElementById('sitio');
 
-if (menuToggle && nav) {
-  menuToggle.addEventListener('click', () => nav.classList.toggle('open'));
+function setDock(id) {
+  if (!nav) return;
   nav.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => nav.classList.remove('open'));
+    const on = link.getAttribute('href') === '#' + id;
+    link.classList.toggle('active', on);
+    if (on) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
   });
 }
+
+function sectionInView() {
+  if (!sitePanel || !document.documentElement.classList.contains('entered')) return 'inicio';
+  const mark = sitePanel.scrollTop + sitePanel.clientHeight * 0.38;
+  let current = 'proyectos';
+  ['proyectos', 'sobre', 'contacto'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el && el.offsetTop <= mark) current = id;
+  });
+  return current;
+}
+
+if (nav) {
+  setDock('inicio');
+  nav.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (link) setDock(link.getAttribute('href').slice(1));
+  });
+}
+if (sitePanel) {
+  sitePanel.addEventListener('scroll', () => {
+    if (document.documentElement.classList.contains('entered')) setDock(sectionInView());
+  }, { passive: true });
+}
+new MutationObserver(() => {
+  const root = document.documentElement;
+  if (root.classList.contains('locked') && !root.classList.contains('entered')) setDock('inicio');
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
 function observeVideoVisibility(video, rootEl) {
   if (!video || !rootEl) return;
