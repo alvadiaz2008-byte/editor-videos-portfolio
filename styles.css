@@ -28,9 +28,9 @@ html.opening .site-panel{visibility:visible;opacity:1}
 html.opening:not(.entered) .site-panel{pointer-events:none}
 html.entered .site-panel{visibility:visible;opacity:1;overflow:auto;pointer-events:auto}
 .hero-content{position:relative;z-index:3;max-width:920px;padding:0 1.5rem}
-.hero-content h1{font-size:clamp(2.7rem,6.2vw,5.1rem);line-height:.92;margin-bottom:1rem;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.55)}
-.subtitle{color:#fff;font-size:clamp(1rem,1.4vw,1.15rem);line-height:1.5;margin:0 auto 1.6rem;max-width:34rem;text-wrap:pretty;text-shadow:0 1px 12px rgba(0,0,0,.6)}
-.hero .btn-outline{color:#fff;border-color:rgba(255,255,255,.75)}
+.hero-content h1{font-size:clamp(2.7rem,6.2vw,5.1rem);line-height:.92;margin-bottom:1rem;color:#14120c}
+.subtitle{color:#14120c;font-size:clamp(1rem,1.4vw,1.15rem);line-height:1.5;margin:0 auto 1.6rem;max-width:34rem;text-wrap:pretty}
+.hero .btn-outline{color:#14120c;border-color:rgba(20,18,12,.7)}
 .hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
 .hero-content h1,.subtitle{transition:transform var(--move)}
 .hero.bridge-lift .hero-content h1,.hero.bridge-lift .subtitle{animation:none;transform:translateY(-120vh);opacity:1}
