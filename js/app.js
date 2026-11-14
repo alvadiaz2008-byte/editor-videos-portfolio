@@ -19,6 +19,7 @@ function setDock(id) {
     else link.removeAttribute('aria-current');
   });
   placeDockMark();
+  requestAnimationFrame(placeDockMark);
 }
 
 function sectionInView() {
@@ -33,24 +34,21 @@ function sectionInView() {
 }
 
 if (nav) {
-  setDock('inicio');
+  const root = document.documentElement;
+  const hash = (location.hash || '').replace(/^#/, '');
+  if (root.classList.contains('entered')) setDock(sectionInView());
+  else if (hash && hash !== 'inicio') setDock(hash);
+  else setDock('inicio');
   requestAnimationFrame(placeDockMark);
   window.addEventListener('resize', placeDockMark);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeDockMark);
-  nav.addEventListener('click', (e) => {
-    const link = e.target.closest('a[href^="#"]');
-    if (link) setDock(link.getAttribute('href').slice(1));
-  });
+  window.addEventListener('section-change', (e) => setDock(e.detail || 'inicio'));
 }
 if (sitePanel) {
   sitePanel.addEventListener('scroll', () => {
     if (document.documentElement.classList.contains('entered')) setDock(sectionInView());
   }, { passive: true });
 }
-new MutationObserver(() => {
-  const root = document.documentElement;
-  if (root.classList.contains('locked') && !root.classList.contains('entered')) setDock('inicio');
-}).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
 function observeVideoVisibility(video, rootEl) {
   if (!video || !rootEl) return;

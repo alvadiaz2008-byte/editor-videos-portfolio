@@ -54,6 +54,10 @@
     history.pushState({ screen: 'site', section: id, i: (s.i || 0) + 1 }, '', cleanUrl() + '#' + id);
   }
 
+  function tellDock(id) {
+    window.dispatchEvent(new CustomEvent('section-change', { detail: id || 'inicio' }));
+  }
+
   function showHero() {
     if (!root.classList.contains('entered') && !root.classList.contains('opening')) return;
     resetCopy();
@@ -62,12 +66,14 @@
     root.classList.add('locked');
     sitio.scrollTop = 0;
     window.scrollTo(0, 0);
+    tellDock('inicio');
     var video = hero.querySelector('video');
     if (video && video.getAttribute('src')) video.play().catch(function () {});
   }
 
   function openProjects(thenId, fromPop) {
     thenId = thenId || 'proyectos';
+    tellDock(thenId);
     if (document.body.classList.contains('bridging') && !fromPop) return;
     if (!fromPop) pushSite(thenId);
 
@@ -87,6 +93,7 @@
         var jump = document.getElementById(thenId);
         if (jump) sitio.scrollTop = jump.offsetTop;
       }
+      tellDock(thenId);
       return;
     }
 
@@ -172,6 +179,7 @@
         var dest = document.getElementById(thenId);
         if (dest) sitio.scrollTop = dest.offsetTop;
       }
+      tellDock(thenId);
     }, 1700);
 
     setTimeout(function () {
