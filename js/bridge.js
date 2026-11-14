@@ -37,7 +37,7 @@
     });
   }
 
-  var heroBg = hero.querySelector('.hero-bg');
+  var heroBg = document.querySelector('.hero-bg');
   if (heroBg && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     heroBg.removeAttribute('autoplay');
     heroBg.pause();
@@ -67,7 +67,7 @@
     sitio.scrollTop = 0;
     window.scrollTo(0, 0);
     tellDock('inicio');
-    var video = hero.querySelector('video');
+    var video = document.querySelector('.hero-bg');
     if (video && video.getAttribute('src')) video.play().catch(function () {});
   }
 
@@ -173,8 +173,6 @@
       root.classList.add('entered');
       root.classList.remove('locked');
       window.dispatchEvent(new Event('projects-enter'));
-      var video = hero.querySelector('video');
-      if (video) video.pause();
       if (thenId && thenId !== 'proyectos') {
         var dest = document.getElementById(thenId);
         if (dest) sitio.scrollTop = dest.offsetTop;

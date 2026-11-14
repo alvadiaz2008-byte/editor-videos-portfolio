@@ -20,6 +20,8 @@ function setDock(id) {
   });
   placeDockMark();
   requestAnimationFrame(placeDockMark);
+  const tone = id === 'inicio' || id === 'proyectos' || id === 'sobre' || id === 'contacto' ? id : 'proyectos';
+  document.documentElement.dataset.tone = tone;
 }
 
 function sectionInView() {

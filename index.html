@@ -14,6 +14,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="backdrop" aria-hidden="true">
+    <video class="hero-bg" src="videos/fondo.mp4" autoplay muted loop playsinline preload="auto"></video>
+    <div class="vignette"></div>
+    <div class="dim"></div>
+  </div>
   <header class="header">
     <a href="#inicio" class="logo" aria-label="spidfor STUDIO"><img src="logo.png" alt="spidfor STUDIO"></a>
     <a href="https://wa.me/51955802712" target="_blank" rel="noopener" class="btn-whatsapp">Hablemos</a>
@@ -28,9 +33,6 @@
   </nav>
 
   <section id="inicio" class="hero">
-    <div class="hero-media" aria-hidden="true">
-      <video class="hero-bg" src="videos/fondo.mp4" autoplay muted loop playsinline preload="auto"></video>
-    </div>
     <div class="hero-content">
       <h1>Edición & Postproducción Audiovisual</h1>
       <p class="subtitle">Videos que capturan atención, transmiten valor y generan resultados.</p>
