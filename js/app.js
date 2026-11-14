@@ -1,6 +1,15 @@
 const nav = document.getElementById('nav');
 const sitePanel = document.getElementById('sitio');
 
+function placeDockMark() {
+  if (!nav) return;
+  const mark = nav.querySelector('.dock-mark');
+  const active = nav.querySelector('a.active');
+  if (!mark || !active) return;
+  mark.style.width = active.offsetWidth + 'px';
+  mark.style.transform = 'translateX(' + active.offsetLeft + 'px)';
+}
+
 function setDock(id) {
   if (!nav) return;
   nav.querySelectorAll('a').forEach((link) => {
@@ -9,6 +18,7 @@ function setDock(id) {
     if (on) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   });
+  placeDockMark();
 }
 
 function sectionInView() {
@@ -24,6 +34,9 @@ function sectionInView() {
 
 if (nav) {
   setDock('inicio');
+  requestAnimationFrame(placeDockMark);
+  window.addEventListener('resize', placeDockMark);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeDockMark);
   nav.addEventListener('click', (e) => {
     const link = e.target.closest('a[href^="#"]');
     if (link) setDock(link.getAttribute('href').slice(1));
