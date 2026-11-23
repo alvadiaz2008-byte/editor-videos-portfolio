@@ -210,9 +210,11 @@
     var href = link.getAttribute('href') || '';
     if (href === '#inicio') {
       e.preventDefault();
-      var depth = (history.state && history.state.i) || 0;
-      if (depth > 0) history.go(-depth);
-      else showHero();
+      if (root.classList.contains('entered') || root.classList.contains('opening') || document.body.classList.contains('bridging')) showHero();
+      else tellDock('inicio');
+      if (!history.state || history.state.screen !== 'hero') {
+        history.pushState({ screen: 'hero', i: ((history.state && history.state.i) || 0) + 1 }, '', cleanUrl());
+      }
       return;
     }
     if (href.charAt(0) !== '#') return;
