@@ -226,26 +226,30 @@ function bindProjectScroller(stage, track) {
     items.forEach((slide, i) => {
       const delta = i - pos;
       const ad = Math.abs(delta);
-      let opacity = 0;
+      let veil = 0;
       let scale = 0.62;
       let blur = 0;
       if (ad < 1.25) {
         const t = Math.max(0, 1 - ad);
-        opacity = 0.55 + 0.45 * t;
+        veil = 0.45 * (1 - t);
         scale = 0.68 + 0.38 * t;
-        blur = (1 - t) * 4;
+        blur = (1 - t) * 3;
       }
-      slide.style.opacity = String(opacity);
-      slide.style.filter = blur > 0.3 ? 'blur(' + blur.toFixed(2) + 'px)' : 'none';
+      slide.style.opacity = ad > 1.25 ? '0' : '1';
+      slide.style.filter = 'none';
       slide.style.transform = 'translate3d(' + (delta * shift) + '%, 0, 0) scale(' + scale + ')';
       slide.style.zIndex = String(20 - Math.round(ad * 8));
       slide.style.visibility = ad > 1.25 ? 'hidden' : 'visible';
       slide.style.pointerEvents = 'none';
       const media = slide.querySelector('.slide-media');
       const copy = slide.querySelector('.slide-copy');
-      if (media) media.style.pointerEvents = 'auto';
+      if (media) {
+        media.style.pointerEvents = 'auto';
+        media.style.setProperty('--peek', veil.toFixed(3));
+      }
       if (copy) copy.style.pointerEvents = ad < 0.45 ? 'auto' : 'none';
       const vid = slide.querySelector('video');
+      if (vid) vid.style.filter = blur > 0.3 ? 'blur(' + blur.toFixed(2) + 'px)' : 'none';
       if (vid && vid.getAttribute('src')) {
         if (open && ad < 0.45) vid.play().catch(() => {});
         else vid.pause();
