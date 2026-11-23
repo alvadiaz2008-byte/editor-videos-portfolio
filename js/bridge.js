@@ -21,7 +21,7 @@
   });
 
   function copyEls() {
-    return hero.querySelectorAll('.hero-content h1, .hero-content .subtitle');
+    return hero.querySelectorAll('.hero-copy');
   }
 
   function resetCopy() {
