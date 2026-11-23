@@ -38,9 +38,22 @@
   }
 
   var heroBg = document.querySelector('.hero-bg');
+  function playBg() {
+    if (!heroBg) return;
+    heroBg.muted = true;
+    heroBg.playsInline = true;
+    var attempt = heroBg.play();
+    if (attempt && attempt.catch) attempt.catch(function () {});
+  }
   if (heroBg && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     heroBg.removeAttribute('autoplay');
     heroBg.pause();
+  } else {
+    playBg();
+    if (heroBg) {
+      heroBg.addEventListener('loadeddata', playBg);
+      heroBg.addEventListener('canplay', playBg);
+    }
   }
 
   function cleanUrl() {

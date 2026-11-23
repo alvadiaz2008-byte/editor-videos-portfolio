@@ -16,6 +16,18 @@
 <body>
   <div class="backdrop" aria-hidden="true">
     <video class="hero-bg" src="videos/fondo.mp4" autoplay muted loop playsinline preload="auto"></video>
+    <script>
+      (function () {
+        var v = document.querySelector('.hero-bg');
+        if (!v || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        v.muted = true;
+        v.playsInline = true;
+        var go = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+        go();
+        v.addEventListener('loadeddata', go);
+        v.addEventListener('canplay', go);
+      })();
+    </script>
     <div class="vignette"></div>
     <div class="dim"></div>
   </div>

@@ -257,19 +257,35 @@ function bindProjectScroller(stage, track) {
     });
   };
 
+  let snapAnim = 0;
   const snapTo = (index) => {
     const { n, total, stageTop } = metrics();
     if (n < 2) return;
     const clamped = Math.min(n - 1, Math.max(0, index));
     const step = total / (n - 1);
+    const target = stageTop + clamped * step;
+    const read = () => (panel ? panel.scrollTop : window.scrollY);
+    const start = read();
+    const dist = target - start;
+    if (Math.abs(dist) < 2) return;
     locking = true;
-    const top = stageTop + clamped * step;
-    if (panel) panel.scrollTo({ top: top, behavior: 'smooth' });
-    else window.scrollTo({ top: top, behavior: 'smooth' });
-    setTimeout(() => {
-      locking = false;
+    cancelAnimationFrame(snapAnim);
+    const t0 = performance.now();
+    const dur = 820;
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const y = start + dist * eased;
+      if (panel) panel.scrollTop = y;
+      else window.scrollTo(0, y);
       update();
-    }, 520);
+      if (p < 1) snapAnim = requestAnimationFrame(tick);
+      else {
+        locking = false;
+        update();
+      }
+    };
+    snapAnim = requestAnimationFrame(tick);
   };
 
   const snapToNearest = () => {
@@ -310,6 +326,8 @@ function bindProjectScroller(stage, track) {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
     clearTimeout(snapTimer);
+    cancelAnimationFrame(snapAnim);
+    locking = false;
   }, { passive: true });
   stage.addEventListener('touchend', (e) => {
     const dx = e.changedTouches[0].clientX - startX;
@@ -317,6 +335,11 @@ function bindProjectScroller(stage, track) {
     if (Math.abs(dx) < 42 || Math.abs(dx) < Math.abs(dy)) return;
     const { pos } = metrics();
     snapTo(Math.round(pos) + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+
+  stage.addEventListener('wheel', () => {
+    cancelAnimationFrame(snapAnim);
+    locking = false;
   }, { passive: true });
 
   track.addEventListener('click', (e) => {
