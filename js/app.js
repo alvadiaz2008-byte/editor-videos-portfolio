@@ -10,6 +10,7 @@ function placeDockMark() {
   mark.style.transform = 'translateX(' + active.offsetLeft + 'px)';
 }
 
+let dockPlaced = false;
 function setDock(id) {
   if (!nav) return;
   nav.querySelectorAll('a').forEach((link) => {
@@ -18,7 +19,14 @@ function setDock(id) {
     if (on) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   });
+  const mark = nav.querySelector('.dock-mark');
+  if (mark && !dockPlaced) mark.style.transition = 'none';
   placeDockMark();
+  if (mark && !dockPlaced) {
+    mark.getBoundingClientRect();
+    mark.style.transition = '';
+    dockPlaced = true;
+  }
   requestAnimationFrame(placeDockMark);
   const tone = id === 'inicio' || id === 'proyectos' || id === 'sobre' || id === 'contacto' ? id : 'proyectos';
   document.documentElement.dataset.tone = tone;
@@ -44,6 +52,10 @@ if (nav) {
   requestAnimationFrame(placeDockMark);
   window.addEventListener('resize', placeDockMark);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeDockMark);
+  if (window.ResizeObserver) {
+    const dockResize = new ResizeObserver(() => placeDockMark());
+    nav.querySelectorAll('a').forEach((link) => dockResize.observe(link));
+  }
   window.addEventListener('section-change', (e) => setDock(e.detail || 'inicio'));
 }
 if (sitePanel) {
