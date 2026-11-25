@@ -5,6 +5,8 @@ html.locked,html.locked body{overflow:hidden;height:100%;overscroll-behavior:non
 body{font-family:Inter,system-ui,sans-serif;background:#000;color:var(--text);line-height:1.6;overflow-x:hidden}h1,h2,.tools h3,.proj-num,.footer-name,.proj-desc-box h3{font-family:var(--serif);font-weight:500;letter-spacing:-.008em;text-wrap:balance}button,a{touch-action:manipulation}button,.btn,.btn-whatsapp,.menu-toggle,.badge{-webkit-user-select:none;user-select:none}:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 body.bridging{overflow:hidden}
 .header{position:fixed;top:0;left:0;right:0;z-index:140;display:flex;align-items:center;justify-content:space-between;padding:calc(.7rem + env(safe-area-inset-top)) 2.2rem .7rem;background:transparent;border:0;pointer-events:none}
+html.opening:not(.move-in):not(.entered) .header{transform:translateY(-120%);transition:none}
+html.move-in .header,html.entered .header{transform:translateY(0);transition:transform var(--move)}
 .header .logo,.header .btn-whatsapp{pointer-events:auto}
 .logo{display:inline-flex;align-items:center;line-height:0;text-decoration:none;transition:opacity .35s var(--ease)}
 .logo img{height:40px;width:auto;display:block}
@@ -115,7 +117,7 @@ html.move-in .projects-viewport,html.entered .projects-viewport{transform:none;t
 @media (prefers-reduced-motion:reduce){
   .hero-content h1,.hero-content .subtitle,.hero-content .hero-ctas,.hero-copy{animation:none}
   .reveal{opacity:1;transform:none}
-  html.opening:not(.move-in):not(.entered) .projects-viewport,html.move-in .projects-viewport,html.entered .projects-viewport{transform:none;opacity:1;transition:none}
+  html.opening:not(.move-in):not(.entered) .header,html.move-in .header,html.entered .header,html.opening:not(.move-in):not(.entered) .projects-viewport,html.move-in .projects-viewport,html.entered .projects-viewport{transform:none;opacity:1;transition:none}
   .dock{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(244,242,238,.94)}
   .dock-mark,.dock a,.dock a span,.dock a svg,.dim{transition:none}
   .proj-desc-box::before{backdrop-filter:none;-webkit-backdrop-filter:none}
