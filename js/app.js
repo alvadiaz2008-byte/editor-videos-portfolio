@@ -386,9 +386,9 @@ function bindProjectScroller(stage, track) {
 
 
 const TRAITS = {
-  audio: ['Audio', '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m18,7.5v9c0,.276-.224.5-.5.5s-.5-.224-.5-.5V7.5c0-.276.224-.5.5-.5s.5.224.5.5ZM13.5,0c-.276,0-.5.224-.5.5v23c0,.276.224.5.5.5s.5-.224.5-.5V.5c0-.276-.224-.5-.5-.5Zm8,4c-.276,0-.5.224-.5.5v15c0,.276.224.5.5.5s.5-.224.5-.5V4.5c0-.276-.224-.5-.5-.5Zm-12,0c-.276,0-.5.224-.5.5v15c0,.276.224.5.5.5s.5-.224.5-.5V4.5c0-.276-.224-.5-.5-.5Zm-4,3c-.276,0-.5.224-.5.5v9c0,.276.224.5.5.5s.5-.224.5-.5V7.5c0-.276-.224-.5-.5-.5Zm-4,2c-.276,0-.5.224-.5.5v5c0,.276.224.5.5.5s.5-.224.5-.5v-5c0-.276-.224-.5-.5-.5Z"/></svg>'],
-  texto: ['Texto', '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M24,14v1h-1v-1c0-.55-.45-1-1-1h-3v10h-1V13h-3c-.55,0-1,.45-1,1v1h-1v-1c0-1.1,.9-2,2-2h7c1.1,0,2,.9,2,2ZM16.5,2c.83,0,1.5,.67,1.5,1.5v1.5h1v-1.5c0-1.38-1.12-2.5-2.5-2.5H2.5C1.12,1,0,2.12,0,3.5v1.5H1v-1.5c0-.83,.67-1.5,1.5-1.5h6.5V23h1V2h6.5Z"/></svg>'],
-  subtitulos: ['Subtítulos', '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.5,1.987H4.5C2.019,1.987,0,4.006,0,6.487v11c0,2.481,2.019,4.5,4.5,4.5h15c2.481,0,4.5-2.019,4.5-4.5V6.487c0-2.481-2.019-4.5-4.5-4.5Zm3.5,15.5c0,1.93-1.57,3.5-3.5,3.5H4.5c-1.93,0-3.5-1.57-3.5-3.5V6.487c0-1.93,1.57-3.5,3.5-3.5h15c1.93,0,3.5,1.57,3.5,3.5v11Zm-3-4.987c0,.276-.224,.5-.5,.5H9.5c-.276,0-.5-.224-.5-.5s.224-.5,.5-.5h10c.276,0,.5,.224,.5,.5Zm0,4c0,.276-.224,.5-.5,.5h-2c-.276,0-.5-.224-.5-.5s.224-.5,.5-.5h2c.276,0,.5,.224,.5,.5ZM4,12.5c0-.276,.224-.5,.5-.5h2c.276,0,.5,.224,.5,.5s-.224,.5-.5,.5h-2c-.276,0-.5-.224-.5-.5Zm11,4c0,.276-.224,.5-.5,.5H4.5c-.276,0-.5-.224-.5-.5s.224-.5,.5-.5H14.5c.276,0,.5,.224,.5,.5Z"/></svg>']
+  audio: ['Audio', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>'],
+  texto: ['Texto', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M12 6v12M8.5 18h7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
+  subtitulos: ['Subtítulos', '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7 11.2h5.5M7 15h10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>']
 };
 
 function traitsHtml(list) {
