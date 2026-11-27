@@ -98,18 +98,6 @@
       return;
     }
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      root.classList.remove('locked');
-      root.classList.add('entered');
-      window.dispatchEvent(new Event('projects-enter'));
-      if (thenId) {
-        var jump = document.getElementById(thenId);
-        if (jump) sitio.scrollTop = jump.offsetTop;
-      }
-      tellDock(thenId);
-      return;
-    }
-
     var title = sitio.querySelector('.projects-head h2');
     var hint = sitio.querySelector('.projects-hint');
     var from = btn.getBoundingClientRect();
@@ -144,13 +132,14 @@
     ghost.style.opacity = '1';
     document.body.appendChild(ghost);
     btn.style.visibility = 'hidden';
+    void ghost.offsetWidth;
 
     var move = '1.7s cubic-bezier(.77,0,.18,1)';
     requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
       root.classList.add('move-in');
       copyEls().forEach(function (el) {
-        el.style.transition = move;
-        el.style.transitionProperty = 'transform';
+        el.style.transition = 'transform ' + move;
         el.style.transform = 'translateY(-120vh)';
       });
       ghost.style.transition = 'left ' + move + ', top ' + move + ', width ' + move + ', height ' + move + ', border-radius ' + move + ', background ' + move + ', color ' + move + ', font-size ' + move + ', padding ' + move + ', box-shadow ' + move + ', letter-spacing ' + move;
@@ -170,6 +159,7 @@
       ghost.style.letterSpacing = titleStyle.letterSpacing;
       ghost.style.justifyContent = 'flex-start';
       ghost.style.textAlign = 'left';
+      });
     });
 
     setTimeout(function () {
